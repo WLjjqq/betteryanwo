@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.ShopCartDao">
+	<sql id="cart_column1">
+		cart.id,
+		cart_info.id AS cartItem_id,
+		cart_info.cartId
+	</sql>
+	<sql id="cart_column">
+		cart.id,
+		cart.price,
+		cart.userId,
+		cart.status,
+		cart.dateCreated,
+		cart.dateUpdated,
+		cart.description,
+		cart_info.id,
+		cart_info.itemNum,
+		cart_info.cartId,
+		cart_info.goods_id,
+		goods.GoodsId,
+		goods.GoodsName,
+		goods.GPrice,
+		goods.GTypeID,
+		goods.GIntro,
+		goods.GImage,
+		goods.GCount,
+		goods.GSail,
+		goods.GWeight,
+		goods.GDateTime,
+		goods.GSize,
+		goods.IsHot,
+		goods.IsReconnend
+	</sql>
+	<!-- 订单查询关联查询用户的resultMap，即将整个查询的结果映射到cart中 -->
+	<resultMap type="cart" id="cartsResultMap">
+		<!-- 配置要映射的订单信息，如果有多个列组成唯一标识，那需要配置多个id，
+        property指定将唯一表示映射到pojo中的哪个属性上 -->
+		<id column="id" property="id"/>
+		<result column="price" property="price"/>
+		<result column="userId" property="userId"/>
+		<result column="status" property="status"/>
+		<result column="dateCreated" property="dateCreated"/>
+		<result column="dateUpdated" property="dateUpdated"/>
+		<result column="description" property="description"/>
+
+		<!-- 购物车明细信息，一个购物车查询出了多个订单明细，要是用collection进行映射
+        collection:对关联查询到多条记录映射到集合中
+        property:映射到cart类中的哪个属性
+        ofType:要映射到集合中pojo的属性 -->
+		<collection property="cartItems" ofType="com.betteryanwo.entity.CartInfo">
+			<!-- id：订单明细的唯一标识,property:要将订单明细的唯一标识映射到Cartdetail的哪个属性 -->
+			<id column="id" property="id"/>
+			<result column="itemNum" property="itemNum"/>
+			<result column="cartId" property="cartId"/>
+			<!-- 配置要映射关联的产品信息，用于映射关联查询单个对象的信息，
+			property表示要将关联查询的用户信息映射到goods中的哪个属性 -->
+			<association property="goods" javaType="goods">
+				<!-- id：关联查询用户的唯一表示
+                column:指定用于唯一表示产品信息的列
+                javaType:映射到Goods的哪个属性 -->
+				<id column="GoodsId" property="GoodsId"/>
+				<result column="GoodsName" property="GoodsName"/>
+				<result column="GPrice" property="GPrice"/>
+				<result column="GTypeID" property="GTypeID"/>
+				<result column="GIntro" property="GIntro"/>
+				<result column="GImage" property="GImage"/>
+				<result column="GCount" property="GCount"/>
+				<result column="GSail" property="GSail"/>
+				<result column="GWeight" property="GWeight"/>
+				<result column="GDateTime" property="GDateTime"/>
+				<result column="GSize" property="GSize"/>
+				<result column="IsHot" property="IsHot"/>
+				<result column="IsReconnend" property="IsReconnend"/>
+			</association>
+
+		</collection>
+	</resultMap>
+
+	<!-- 根据ID查询购物车 -->
+	<select id="getById" parameterType="Long" resultMap="cartsResultMap">
+		SELECT
+		id,
+		price,
+		userId,
+		status,
+		dateCreated,
+		dateUpdated,
+		description
+		FROM
+		cart
+		WHERE
+		id = #{id}
+	</select>
+
+
+	<!-- 根据用户ID查询购物数量 -->
+	<select id="getCountByUserId" resultMap="cartsResultMap">
+		SELECT
+		<include refid="cart_column1"/>
+		FROM
+		cart
+		LEFT JOIN  cart_info ON cart_info.cartId = cart.id
+		WHERE
+		cart.userId = #{userId}
+	</select>
+
+
+	<!-- 根据用户ID查询购物车 -->
+	<select id="getAllByUserId" resultMap="cartsResultMap">
+		SELECT
+		<include refid="cart_column"/>
+		FROM
+		cart
+		LEFT JOIN  cart_info ON cart_info.cartId = cart.id
+		LEFT JOIN  goods ON cart_info.goods_id = goods.GoodsId
+		WHERE
+		cart.userId = #{userId}
+	</select>
+
+	<!-- 查询所有购物车 -->
+	<select id="getAll" resultType="cart">
+		SELECT
+		id,
+		price,
+		userId,
+		status,
+		dateCreated,
+		dateUpdated,
+		description
+		FROM
+		cart
+	</select>
+
+	<!-- 根据实体查询购物车 -->
+	<select id="getAllByCart" parameterType="cart" resultType="cart">
+		SELECT
+		id,
+		price,
+		userId,
+		status,
+		dateCreated,
+		dateUpdated,
+		description
+		FROM
+		cart
+		<where>
+			<if test="id != null"> id = #{id} </if>
+			<if test="userId != null"> and userId = #{userId} </if>
+			<if test="status != null"> and status = #{status} </if>
+			<if test="dateCreated != null"> and dateCreated = #{dateCreated} </if>
+			<if test="dateUpdated != null"> and dateUpdated = #{dateUpdated}</if>
+		</where>
+	</select>
+
+	<!-- 添加购物车 -->
+	<insert id="insert" parameterType="cart" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO cart (price, userId, status, dateCreated, dateUpdated, description)
+		VALUES (#{price}, #{userId}, #{status}, #{dateCreated}, #{dateUpdated}, #{description})
+	</insert>
+	<!-- 更新购物车 -->
+	<update id="update" parameterType="cart">
+		UPDATE cart
+		<set>
+			<if test="status != null"> status = #{status},</if>
+			<if test="price != null">price = #{price},</if>
+			<if test="description != null">description = #{description}</if>
+		</set>
+		WHERE
+		id = #{id}
+	</update>
+
+	<!--删除购物车-->
+	<delete id="delete" parameterType="java.lang.Long">
+		 delete from cart
+		where id=#{cartId}
+	</delete>
+</mapper>

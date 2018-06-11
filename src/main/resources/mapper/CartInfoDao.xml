@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.CartInfoDao">
+	<resultMap type="com.betteryanwo.entity.CartInfo" id="cartInfoResult">
+		<id column="id" property="id" />
+		<result column="itemNum" property="itemNum" />
+		<result column="cartId" property="cartId" />
+		<result column="price" property="price" />
+		<association property="goods" javaType="com.betteryanwo.entity.Goods">
+			<!-- id：关联查询的唯一表示 column:指定用于唯一表示产品信息的列 javaType:映射到Product的哪个属性 -->
+			<id column="GoodsId" property="GoodsId" />
+			<result column="GoodsName" property="GoodsName" />
+			<result column="GPrice" property="GPrice" />
+			<result column="GTypeID" property="GTypeID" />
+			<result column="GIntro" property="GIntro" />
+			<result column="GImage" property="GImage" />
+			<result column="GCount" property="GCount" />
+			<result column="GSail" property="GSail" />
+			<result column="GWeight" property="GWeight" />
+			<result column="GDateTime" property="GDateTime" />
+			<result column="GSize" property="GSize" />
+			<result column="IsHot" property="IsHot" />
+			<result column="IsReconnend" property="IsReconnend" />
+		</association>
+	</resultMap>
+	<!-- 根据ID查询购物项 -->
+	<select id="getById" resultMap="cartInfoResult">
+	SELECT
+	cart_info.id,
+	cart_info.itemNum,
+	cart_info.cartId,
+	cart_info.goods_id,
+	cart_info.price
+	FROM
+	cart_info
+	WHERE
+	cart_info.id = #{itemId}
+	AND
+	cart_info.cartId = #{cartId}
+	</select>
+
+	<!-- 查询所有购物车 -->
+	<select id="getAll" resultType="com.betteryanwo.entity.CartInfo">
+		SELECT
+		id,
+		itemNum,
+		cartId,
+		goods_id,
+		price
+		FROM
+		cart_info
+	</select>
+
+	<!-- 根据实体查询购物项 -->
+	<select id="getByCartItem" parameterType="com.betteryanwo.entity.CartInfo"
+			resultType="com.betteryanwo.entity.CartInfo">
+		SELECT
+		id,
+		itemNum,
+		cartId,
+		goods_id,
+		price
+		FROM
+		cart_info
+		<where>
+			<if test="id != null"> id = #{id} </if>
+			<if test="itemNum != null"> and itemNum = #{itemNum} </if>
+			<if test="cartId != null"> and cartId = #{cartId} </if>
+		</where>
+	</select>
+
+	<!-- 根据购物车ID查询购物项 -->
+	<select id="getAllByCartId" parameterType="java.lang.Long"
+			resultType="com.betteryanwo.entity.CartInfo">
+		SELECT
+		id,
+		itemNum,
+		cartId,
+		goods_id,
+		price
+		FROM
+		cart_info
+		WHERE
+		cartId = #{cartId}
+	</select>
+
+	<!-- 添加购物项 -->
+	<insert id="insert" parameterType="com.betteryanwo.entity.CartInfo">
+		INSERT INTO cart_info
+		(itemNum,cartId,goods_id,price)
+		VALUES (#{itemNum},
+		#{cartId}, #{goods.GoodsId},#{price})
+	</insert>
+
+	<!-- 根据ID删除购物项 -->
+	<delete id="delete" parameterType="java.lang.Long">
+		DELETE FROM
+		cart_info
+		WHERE
+		id = #{id}
+	</delete>
+
+	<!-- 根据用户ID删除购物项(清空购物车) -->
+	<delete id="deleteByCartId" parameterType="java.lang.Long">
+		DELETE FROM cart_info
+		WHERE cartId = #{cartId}
+	</delete>
+
+	<!-- 更新购物车 -->
+	<update id="update" parameterType="com.betteryanwo.entity.CartInfo">
+		UPDATE cart_info
+		<set>
+			<if test="itemNum != null"> itemNum = #{itemNum},</if>
+			<if test="cartId != null"> cartId = #{cartId},</if>
+			<if test="price != null">price = #{price}</if>
+		</set>
+		WHERE
+		id = #{id}
+	</update>
+	
+	<!--在购物项中根据商品ID和购物车ID查看有没有这个商品-->
+	<select id="selectCartInfoByGoodsIdAndCartId" parameterType="java.lang.Long"
+			resultType="int">
+		SELECT count(id) FROM cart_info
+		where
+		1=1
+		and
+		<if test="cartId != null">cartId=#{cartId}</if>
+		and
+		<if test="goodsId !=null">goods_id=#{goodsId}</if>
+	</select>
+
+	<select id="getNumAndPrice" parameterType="java.lang.Long" resultType="map">
+		SELECT id,itemNum,count(id) num
+		FROM cart_info
+		where
+		1=1
+		and
+		<if test="cartId != null">cartId=#{cartId}</if>
+		and
+		<if test="goodsId !=null">goods_id=#{goodsId}</if>
+		group by id
+	</select>
+</mapper>

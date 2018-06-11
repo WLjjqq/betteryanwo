@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.AddressDao">
+
+    <resultMap type="com.betteryanwo.entity.Address" id="Address_ResultMap">
+        <id column="AddressId" property="AddressId" jdbcType="BIGINT"/>
+        <result column="UserID" property="UserID" jdbcType="BIGINT"/>
+        <result column="Country" property="Country" jdbcType="VARCHAR"/>
+        <result column="Province" property="Province" jdbcType="VARCHAR"/>
+        <result column="City" property="City" jdbcType="VARCHAR"/>
+        <result column="County" property="County" jdbcType="VARCHAR"/>
+        <result column="Address" property="Address" jdbcType="VARCHAR"/>
+        <result column="Consignee" property="Consignee" jdbcType="VARCHAR"/>
+        <result column="ConsigneeTel" property="ConsigneeTel" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Address_Sql">
+        AddressId,UserID,Country,Province,City,County,Address,Consignee,ConsigneeTel
+    </sql>
+    <select id="getAddressById" parameterType="java.lang.Long" resultMap="Address_ResultMap">
+        select
+        <include refid="Address_Sql"/>
+        from address address
+        where address.AddressId=#{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getAddressIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select AddressId
+        from address
+        where UserID=#{userId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

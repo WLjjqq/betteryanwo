@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.UsersDao">
+    <resultMap type="com.betteryanwo.entity.Users" id="UsersMap">
+        <result column="UserId" property="userId" />
+        <result column="UserName" property="userName" />
+        <result column="RealName" property="realName" />
+        <result column="UserSex" property="userSex" />
+        <result column="UserPassword" property="userPassword" />
+        <result column="Email" property="email" />
+        <result column="Phone" property="phone" />
+        <result column="CardId" property="cardId" />
+        <result column="RegTime" property="regTime" />
+        <result column="Integral" property="integral" />
+        <result column="GradeId" property="gradeId" />
+    </resultMap>
+    <!-- 登录 -->
+    <select id="userLogin" parameterType="com.betteryanwo.entity.Users" resultMap="UsersMap">
+	 select UserName,UserPassword
+	 from user
+	 where UserName=#{userName} and UserPassword=#{userPassword}
+	</select>
+    <select id="getById" parameterType="com.betteryanwo.entity.Users" resultType="Long">
+     select * from user where UserId=#{userId}
+    </select>
+    <select id="getByEmail" parameterType="com.betteryanwo.entity.Users" resultType="String">
+     select * from user where emial=#{email}
+    </select>
+
+    <select id="getByUserPassword" parameterType="com.betteryanwo.entity.Users" resultMap="UsersMap">
+      select * from user where email=#{email} and UserPassword=#{userPassword}
+    </select>
+
+
+</mapper>

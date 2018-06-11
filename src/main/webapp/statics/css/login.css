@@ -1,0 +1,138 @@
+.beg-login-bg {
+	background: url(../images/timg3.jpg) no-repeat center center fixed;
+	background-color: #393D49;
+}
+
+.beg-login-box {
+	width: 430px;
+	height: 430px;
+	margin: 7% auto;
+	padding-top: 25px;
+	background-color: rgba(255, 255, 255, 0.7);
+	border-radius: 10px;
+	color: aliceblue;
+}
+
+.beg-login-box header {
+	height: 50px;
+	padding: 10px;
+	border-bottom: 1px solid aliceblue;
+}
+
+.beg-login-box header h1 {
+	text-align: center;
+	font-size: 25px;
+	line-height: 50px;
+}
+
+.beg-login-box .beg-login-main {
+	height: 185px;
+	padding: 30px 90px 0;
+}
+
+.beg-login-main .layui-form-item {
+	position: relative;
+}
+
+.beg-login-main .layui-form-item .beg-login-icon {
+	position: absolute;
+	color: #cccccc;
+	top: 10px;
+	left: 10px;
+}
+
+.beg-login-main .layui-form-item input {
+	padding-left: 34px;
+}
+
+.beg-login-box footer {
+	height: 35px;
+	padding: 10px 10px 0 10px;
+}
+
+.beg-login-box footer p {
+	line-height: 35px;
+	text-align: center;
+}
+
+.beg-pull-left {
+	float: left !important;
+}
+
+.beg-pull-right {
+	float: right !important;
+	
+	
+}
+
+.beg-clear {
+	clear: both;
+}
+
+.beg-login-remember {
+	line-height: 38px;
+}
+
+.beg-login-remember .layui-form-switch {
+	margin-top: 0px;
+}
+
+.beg-login-code-box {
+	position: relative;
+	padding: 10px;
+}
+
+.beg-login-code-box input {
+	position: absolute;
+	width: 100px;
+}
+
+.beg-login-code-box img {
+	cursor: pointer;
+	position: absolute;
+	left: 115px;
+	height: 38px;
+}
+
+
+#all{
+				width: 100%;
+				background:url(/statics/images/999.jpg) no-repeat;
+			}
+			#beg-login-box-one{
+				width: 430px;
+				height: 100px;
+
+
+			}
+			#beg-login-box-one img{
+				width: 70px;
+				height: 70px;
+				margin-left: 180px;
+			}
+			#one-font{
+				color: #58B236;
+				font-family: marlett;
+				font-size: 16px;
+				font-weight:bold;
+				margin-left: 175px;
+			}
+			#icon-user{
+				background:url(/statics/images/name.png) no-repeat;
+				
+			}
+			#icon-pwd{
+				background:url(/statics/images/pwd.png) no-repeat;
+				
+			}
+			#icon-log{
+				background:url(/statics/images/icon.png) no-repeat;
+				
+			}
+			#font-log{
+				color:darksalmon;
+				font-family: marlett;
+				font-size: 18px;
+				font-weight:bold;
+				margin-left: 195px;
+			}

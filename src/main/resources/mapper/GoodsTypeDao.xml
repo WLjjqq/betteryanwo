@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.GoodsTypeDao">
+
+    <resultMap type="com.betteryanwo.entity.GoodsType" id="GoodsType_ResultMap">
+        <id column="TypeId" property="TypeId" jdbcType="INTEGER"/>
+        <result column="TypeName" property="TypeName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="GoodsType_Sql">
+        TypeId,TypeName
+    </sql>
+    <select id="listGoodsType"  resultMap="GoodsType_ResultMap">
+        select
+        <include refid="GoodsType_Sql"/>
+        from goodstype
+    </select>
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.PayOrderDao">
+    <insert id="insertPayOrder" parameterType="com.betteryanwo.entity.PayOrder"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into mall_pay values(#{id},#{userId},#{amount},
+        #{status},#{bank},#{bankId},#{createTime},#{modifyTime},
+        #{detailMsg},#{paymentMethod})
+    </insert>
+
+    <update id="updatePayStatus" parameterType="java.lang.Integer">
+        update mall_pay set status=#{newStatus}, modify_time=now() where id=#{payId}
+    </update>
+</mapper>
