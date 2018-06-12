@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Cart {
     private Long id;    //购物车ID
-    private List<CartInfo> cartItems;   //购物车项
+    private List<CartItem> cartItems;   //购物车项
     /*商品总价*/
     private BigDecimal price;
     /*所属用户*/
@@ -33,11 +33,11 @@ public class Cart {
         this.id = id;
     }
 
-    public List<CartInfo> getCartItems() {
+    public List<CartItem> getCartItems() {
         return cartItems;
     }
 
-    public void setCartItems(List<CartInfo> cartItems) {
+    public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
 

@@ -1,6 +1,6 @@
 package com.betteryanwo.dao;
 
-import com.betteryanwo.entity.CartInfo;
+import com.betteryanwo.entity.CartItem;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,35 +12,35 @@ import java.util.Map;
  * Date:18-6-8
  * 购物项
  */
-public interface CartInfoDao {
+public interface CartItemDao {
     /**
      * 根据ID获取购物项
      * @param itemId 购物项ID
      * @param cartId 购物车ID
      * @return
      */
-    CartInfo getById(@Param("itemId") Long itemId,
+    CartItem getById(@Param("itemId") Long itemId,
                      @Param("cartId") Long cartId);
 
     /**
      * 获取所有购物项
      * @return
      */
-    List<CartInfo> getAll();
+    List<CartItem> getAll();
 
     /**
      * 根据购物项进行筛选
      * @param cartItem
      * @return
      */
-    CartInfo getByCartItem(CartInfo cartItem);
+    CartItem getByCartItem(CartItem cartItem);
 
     /**
      * 根据购物车ID获取购物项
      * @param cartId
      * @return
      */
-    List<CartInfo> getAllByCartId(Long cartId);
+    List<CartItem> getAllByCartId(Long cartId);
 
     /**
      * 添加购物项
@@ -48,7 +48,7 @@ public interface CartInfoDao {
      * @return
      */
     @Transactional
-    int insert(CartInfo entity);
+    int insert(CartItem entity);
 
     /**
      * 更新购物项
@@ -56,7 +56,7 @@ public interface CartInfoDao {
      * @return
      */
     @Transactional
-    int update(CartInfo entity);
+    int update(CartItem entity);
 
     /**
      *  根据ID删除购物项

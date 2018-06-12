@@ -2,7 +2,7 @@ package com.betteryanwo.controller;
 
 import com.betteryanwo.dto.Result;
 import com.betteryanwo.entity.Cart;
-import com.betteryanwo.entity.CartInfo;
+import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.entity.Goods;
 import com.betteryanwo.service.CartItemService;
 import com.betteryanwo.service.GoodsService;
@@ -50,10 +50,10 @@ public class ShopCartController {
                                        @RequestParam("number") Integer number) {
         Result result = new Result();
         try {
-            CartInfo cartInfo = new CartInfo();
-            cartInfo.setItemNum(number);
-            cartInfo.setId(cartInftoId);
-            cartItemService.update(cartInfo);
+            CartItem cartItem = new CartItem();
+            cartItem.setItemNum(number);
+            cartItem.setId(cartInftoId);
+            cartItemService.update(cartItem);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +111,13 @@ public class ShopCartController {
                                  @RequestParam("userId") Long userId,
                                  @RequestParam("number") Integer number){
         Result result = new Result();
+        //查看库存
+        int countGoods = goodsService.CountGoods(goodsId);
+        if(countGoods<number){
+            return new Result(false,"抱歉，库存不足");
+        }
         try {
+            //查看这个用户有购物车没有
             Cart cart = shopCartService.getByUserId(userId);
             if(cart == null){
                 Cart cart1 = new Cart();
@@ -119,32 +125,31 @@ public class ShopCartController {
                 cart1.setUserId(userId);
                 cart1.setPrice(new BigDecimal(goods.getGPrice()*number));
                 shopCartService.insert(cart1);
-                CartInfo cartInfo = new CartInfo();
-                cartInfo.setCartId(cart1.getId());
-                cartInfo.setItemNum(number);
-                cartInfo.setGoods(goods);
-                cartInfo.setPrice(new BigDecimal(goods.getGPrice()*number));
-                cartItemService.insert(cartInfo);
+                CartItem cartItem = new CartItem();
+                cartItem.setCartId(cart1.getId());
+                cartItem.setItemNum(number);
+                cartItem.setGoods(goods);
+                cartItem.setPrice(new BigDecimal(goods.getGPrice()*number));
+                cartItemService.insert(cartItem);
             }else{
-                CartInfo cartInfo = new CartInfo();
+                CartItem cartItem = new CartItem();
                 Goods goods = goodsService.getGoodsById(goodsId);
                 boolean b = cartItemService.cartInfoHasGoods(goodsId, cart.getId());
                 if(b){
-                    cartInfo.setGoods(goods);
-                    cartInfo.setItemNum(number);
-                    cartInfo.setCartId(cart.getId());
-                    cartInfo.setPrice(new BigDecimal(goods.getGPrice()* number));
-                    cartItemService.insert(cartInfo);
+                    cartItem.setGoods(goods);
+                    cartItem.setItemNum(number);
+                    cartItem.setCartId(cart.getId());
+                    cartItem.setPrice(new BigDecimal(goods.getGPrice()* number));
+                    cartItemService.insert(cartItem);
                 }
                 List<Map<String, Object>> mapList = cartItemService.getNumAndPrice(goodsId, cart.getId());
                 for(Map map:mapList) {
                     Integer itemNum = (Integer) map.get("itemNum");
                     Long id = (Long) map.get("id");
-                    cartInfo.setItemNum(itemNum + number);
-                    cartInfo.setId(id);
-                    cartInfo.setPrice(new BigDecimal((itemNum + number) * goods.getGPrice()));
-                    cartItemService.update(cartInfo);
-
+                    cartItem.setItemNum(itemNum + number);
+                    cartItem.setId(id);
+                    cartItem.setPrice(new BigDecimal((itemNum + number) * goods.getGPrice()));
+                    cartItemService.update(cartItem);
                 }
             }
             result.setSuccess(true);

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.betteryanwo.dao.CartInfoDao">
+<mapper namespace="com.betteryanwo.dao.CartItemDao">
 	<resultMap type="com.betteryanwo.entity.CartInfo" id="cartInfoResult">
 		<id column="id" property="id" />
 		<result column="itemNum" property="itemNum" />

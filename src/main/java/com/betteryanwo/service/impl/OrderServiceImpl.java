@@ -3,7 +3,7 @@ package com.betteryanwo.service.impl;
 import com.betteryanwo.dao.OrderDao;
 import com.betteryanwo.dao.OrderItemDao;
 import com.betteryanwo.entity.Cart;
-import com.betteryanwo.entity.CartInfo;
+import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.entity.Order;
 import com.betteryanwo.entity.OrderItem;
 import com.betteryanwo.exception.OrderException;
@@ -79,10 +79,10 @@ public class OrderServiceImpl implements OrderService {
         try{
             //一：添加订单
             //1:判断购物车项是否为空
-            List<CartInfo> cartInfos = cartItemService.getAllByCartId(cart.getId());
+            List<CartItem> cartItems = cartItemService.getAllByCartId(cart.getId());
             //List<CartInfo> cartItems = cart.getCartItems();
-            System.out.println("cartItems的值："+cartInfos);
-            if(null==cartInfos || cartInfos.size()==0){
+            System.out.println("cartItems的值："+cartItems);
+            if(null==cartItems || cartItems.size()==0){
                 throw new OrderException("购物车为空");
             }
             //2:要不要发票
@@ -104,12 +104,12 @@ public class OrderServiceImpl implements OrderService {
             //5:添加订单到数据库
             orderDao.insert(order);
             //二：添加订单项
-            for(CartInfo cartInfo:cartInfos){
+            for(CartItem cartItem:cartItems){
                 OrderItem oim = new OrderItem();// 新建一个订单项
                 oim.setOrderId(order.getId());
-                oim.setItemNum(cartInfo.getItemNum());
-                oim.setPrice(cartInfo.getPrice());
-                oim.setGoods(cartInfo.getGoods());
+                oim.setItemNum(cartItem.getItemNum());
+                oim.setPrice(cartItem.getPrice());
+                oim.setGoods(cartItem.getGoods());
                 addOrderItemToList(userId, orderItemList, oim);
             }
         }catch (Exception e){
@@ -152,5 +152,15 @@ public class OrderServiceImpl implements OrderService {
     public int deleteOrder(Long orderId,String orderSerial) {
         orderItemDao.deleteOrderItem(orderId);
         return orderDao.delete(orderSerial);
+    }
+
+    /**
+     * 根据订单号查询订单
+     * @param orderSerial
+     * @return
+     */
+    @Override
+    public Order getOrderByOrderSerial(String orderSerial) {
+        return orderDao.getOrderByOrderSerial(orderSerial);
     }
 }

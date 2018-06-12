@@ -15,15 +15,15 @@ public class PayOrderDaoTest extends BaseTest {
 
     @Test
     public void test(){
-        PayOrder payOrder = new PayOrder(2, 1l, "120000",
+        PayOrder payOrder = new PayOrder(4, 1l, "120000",
                 0, "中国银行", "62178909", new Date(), new Date(),
                 "支付接口", "支付宝");
         payOrderDao.insertPayOrder(payOrder);
     }
 
-    @Test
+    /*@Test
     public void test2(){
         payOrderDao.updatePayStatus(2, 1, 0);
 
-    }
+    }*/
 }

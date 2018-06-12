@@ -36,4 +36,15 @@
 		order_serial = #{orderSerial}
 	</delete>
 
+    <sql id="Order_Sql">
+        id,order_serial,price,user_id,status,date_created,date_updated,
+        description,is_invoice,shopping_status,payment_method
+    </sql>
+    <!--根据订单号查询订单-->
+    <select id="getOrderByOrderSerial" parameterType="java.lang.String" resultType="order">
+        select
+         <include refid="Order_Sql"/>
+         from orders where
+        order_serial=#{orderSerial}
+    </select>
 </mapper>

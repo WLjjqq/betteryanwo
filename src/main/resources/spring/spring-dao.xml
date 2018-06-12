@@ -15,10 +15,10 @@
         <property name="password" value="${password}"/>
 
         <property name="minPoolSize" value="10"/>
-        <property name="maxPoolSize" value="30"/>
-        <property name="initialPoolSize" value="10"/>
+        <property name="maxPoolSize" value="40"/>
+        <property name="initialPoolSize" value="20"/>
         <property name="autoCommitOnClose" value="false"/>
-        <property name="checkoutTimeout" value="1800"/>
+        <property name="checkoutTimeout" value="18000"/>
         <property name="acquireRetryAttempts" value="2"/>
         <property name="testConnectionOnCheckout" value="false"/>
         <property name="testConnectionOnCheckin" value="true"/>

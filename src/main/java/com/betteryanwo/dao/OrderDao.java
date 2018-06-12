@@ -30,4 +30,11 @@ public interface OrderDao {
      */
     @Transactional
     int delete(String orderSerial);
+
+    /**
+     * 根据订单号查询订单
+     * @param orderSerial
+     * @return
+     */
+    Order getOrderByOrderSerial(String orderSerial);
 }

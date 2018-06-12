@@ -1,7 +1,7 @@
 package com.betteryanwo.service;
 
 import com.betteryanwo.entity.Cart;
-import com.betteryanwo.entity.CartInfo;
+import com.betteryanwo.entity.CartItem;
 
 import java.util.List;
 import java.util.Map;
@@ -16,35 +16,35 @@ public interface CartItemService {
      * @param id
      * @return
      */
-    CartInfo getById(Long id, Long cartId);
+    CartItem getById(Long id, Long cartId);
 
     /**
      * 根据购物车ID获取所有购物项
      * @param cartId
      * @return
      */
-    List<CartInfo> getAllByCartId(Long cartId);
+    List<CartItem> getAllByCartId(Long cartId);
 
     /**
      * 根据购物项筛选
      * @param entity
      * @return
      */
-    CartInfo getByCartItem(CartInfo entity);
+    CartItem getByCartItem(CartItem entity);
 
     /**
      * 新增购物项
      * @param entity
      * @return
      */
-    int insert(CartInfo entity);
+    int insert(CartItem entity);
 
     /**
      * 更新购物项
      * @param entity
      * @return
      */
-    int update(CartInfo entity);
+    int update(CartItem entity);
 
     /**
      * 根据ID删除购物项
@@ -65,7 +65,7 @@ public interface CartItemService {
      * @param item 购物项
      * @Author
      */
-    List<CartInfo> addDistrict(Cart cart, CartInfo item);
+    List<CartItem> addDistrict(Cart cart, CartItem item);
 
     /**
      * 购物项中是否有这个商品

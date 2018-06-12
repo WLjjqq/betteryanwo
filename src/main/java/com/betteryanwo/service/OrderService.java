@@ -29,4 +29,6 @@ public interface OrderService {
      * @return
      */
     int deleteOrder(Long orderId,String orderSerial);
+
+    Order getOrderByOrderSerial(String orderSerial);
 }

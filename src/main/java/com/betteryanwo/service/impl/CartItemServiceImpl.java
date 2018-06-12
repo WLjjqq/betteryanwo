@@ -1,8 +1,8 @@
 package com.betteryanwo.service.impl;
 
-import com.betteryanwo.dao.CartInfoDao;
+import com.betteryanwo.dao.CartItemDao;
 import com.betteryanwo.entity.Cart;
-import com.betteryanwo.entity.CartInfo;
+import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.service.CartItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,41 +21,41 @@ public class CartItemServiceImpl implements CartItemService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    CartInfoDao cartInfoDao;
+    CartItemDao cartItemDao;
 
     @Override
-    public CartInfo getById(Long id, Long cartId) {
-        return cartInfoDao.getById(id,cartId);
+    public CartItem getById(Long id, Long cartId) {
+        return cartItemDao.getById(id,cartId);
     }
 
     @Override
-    public List<CartInfo> getAllByCartId(Long cartId) {
-        return cartInfoDao.getAllByCartId(cartId);
+    public List<CartItem> getAllByCartId(Long cartId) {
+        return cartItemDao.getAllByCartId(cartId);
     }
 
     @Override
-    public CartInfo getByCartItem(CartInfo entity) {
-        return cartInfoDao.getByCartItem(entity);
+    public CartItem getByCartItem(CartItem entity) {
+        return cartItemDao.getByCartItem(entity);
     }
 
     @Override
-    public int insert(CartInfo entity) {
-        return cartInfoDao.insert(entity);
+    public int insert(CartItem entity) {
+        return cartItemDao.insert(entity);
     }
 
     @Override
-    public int update(CartInfo entity) {
-        return cartInfoDao.update(entity);
+    public int update(CartItem entity) {
+        return cartItemDao.update(entity);
     }
 
     @Override
     public int delete(Long id) {
-        return cartInfoDao.delete(id);
+        return cartItemDao.delete(id);
     }
 
     @Override
     public int deleteByCartId(Long cartId) {
-        return cartInfoDao.deleteByCartId(cartId);
+        return cartItemDao.deleteByCartId(cartId);
     }
 
     /**
@@ -64,8 +64,8 @@ public class CartItemServiceImpl implements CartItemService {
      * @Author
      */
     @Override
-    public List<CartInfo> addDistrict(Cart cart, CartInfo item) {
-        List<CartInfo> cartInfos = cartInfoDao.getAllByCartId(cart.getId());
+    public List<CartItem> addDistrict(Cart cart, CartItem item) {
+        List<CartItem> cartInfos = cartItemDao.getAllByCartId(cart.getId());
         if(hasItem(item,cartInfos)){
             return cartInfos;
         }else{
@@ -80,9 +80,9 @@ public class CartItemServiceImpl implements CartItemService {
      *            购物项
      * @return boolean
      */
-    private boolean hasItem(CartInfo item, List<CartInfo> items) {
+    private boolean hasItem(CartItem item, List<CartItem> items) {
         Long id1 = item.getId();
-        for (CartInfo item1 : items) {
+        for (CartItem item1 : items) {
             Long  id2 = item1.getId();
             if (id1.equals(id2)) {
                 return true;
@@ -95,7 +95,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public boolean cartInfoHasGoods(Long goodsId, Long cartId) {
-        int i = cartInfoDao.selectCartInfoByGoodsIdAndCartId(goodsId, cartId);
+        int i = cartItemDao.selectCartInfoByGoodsIdAndCartId(goodsId, cartId);
         if(i==0){
             return true;
         }else {
@@ -105,6 +105,6 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public List<Map<String, Object>> getNumAndPrice(Long goodsId, Long cartId) {
-        return cartInfoDao.getNumAndPrice(goodsId,cartId);
+        return cartItemDao.getNumAndPrice(goodsId,cartId);
     }
 }

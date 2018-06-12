@@ -7,16 +7,16 @@ import java.math.BigDecimal;
  * Date:18-5-31
  * 购物项
  */
-public class CartInfo {
+public class CartItem {
     private Long id; //购物项ID
     private Integer itemNum;//购物项数量
     private Long cartId;//购物车ID
     private Goods goods;//商品
     private BigDecimal price;//价格
-    public CartInfo() {
+    public CartItem() {
     }
 
-    public CartInfo(Long id, Integer itemNum, Long cartId, Goods goods, BigDecimal price) {
+    public CartItem(Long id, Integer itemNum, Long cartId, Goods goods, BigDecimal price) {
         this.id = id;
         this.itemNum = itemNum;
         this.cartId = cartId;
