@@ -16,12 +16,10 @@ public interface PayOrderService {
     int insertPayOrder(PayOrder payOrder);
 
     /**
-     * 修改支付的状态
-     * @param payId
-     * @param newStatus
-     * @param oldStatus
+     * 修改支付
+     * @param payOrder
      * @return
      */
-    int updatePayOrderStatus(Integer payId, Integer newStatus, Integer oldStatus);
+    int updatePayOrder(PayOrder payOrder);
 
 }

@@ -42,4 +42,6 @@ public interface OrderItemService {
      * @return
      */
     int deleteByOrderId(Long orderId);
+
+    List<OrderItem> getOrderItemByOrderId(Long orderId);
 }

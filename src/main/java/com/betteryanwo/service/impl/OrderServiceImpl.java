@@ -163,4 +163,11 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderByOrderSerial(String orderSerial) {
         return orderDao.getOrderByOrderSerial(orderSerial);
     }
+
+    @Override
+    public Order getByUserIdAndOrderSerial(Long userId, String orderSerial) {
+        return null;
+    }
+
+
 }

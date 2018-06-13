@@ -1,8 +1,10 @@
 package com.betteryanwo.dao;
 
+import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.entity.OrderItem;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -51,4 +53,11 @@ public interface OrderItemDao {
      */
     @Transactional
     int deleteByOrderId(Long orderId);
+
+    /**
+     * 查询订单项
+     * @param orderId
+     * @return
+     */
+    List<OrderItem> getOrderItemByOrderId(@RequestParam("orderId") Long orderId);
 }

@@ -11,7 +11,20 @@
         #{detailMsg},#{paymentMethod})
     </insert>
 
-    <update id="updatePayStatus" parameterType="java.lang.Integer">
-        update mall_pay set status=#{newStatus}, modify_time=now() where id=#{payId}
+    <!--更新支付信息 -->
+    <update id="update" parameterType="payOrder">
+        UPDATE mall_pay
+        <set>
+            <trim>
+                <if test="modifyTime !=null">
+                    modifyTime = #{modifyTime},
+                </if>
+                <if test="status != null" >
+                    status = #{status}
+                </if>
+            </trim>
+        </set>
+        WHERE id = #{id}
     </update>
+
 </mapper>

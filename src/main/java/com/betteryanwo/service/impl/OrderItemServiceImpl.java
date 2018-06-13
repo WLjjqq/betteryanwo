@@ -41,4 +41,9 @@ public class OrderItemServiceImpl implements OrderItemService {
     public int deleteByOrderId(Long orderId) {
         return orderItemDao.deleteByOrderId(orderId);
     }
+
+    @Override
+    public List<OrderItem> getOrderItemByOrderId(Long orderId) {
+        return orderItemDao.getOrderItemByOrderId(orderId);
+    }
 }

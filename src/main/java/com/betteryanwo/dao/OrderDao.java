@@ -2,6 +2,7 @@ package com.betteryanwo.dao;
 
 import com.betteryanwo.entity.Order;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Create by 六
@@ -37,4 +38,13 @@ public interface OrderDao {
      * @return
      */
     Order getOrderByOrderSerial(String orderSerial);
+
+    /**
+     * 根据用户ID和订单ID查询订单
+     * @param userId
+     * @param orderSerial
+     * @return
+     */
+    Order getByUserIdAndOrderSerial(@RequestParam("userId") Long userId,
+                                @RequestParam("orderSerial") String orderSerial);
 }

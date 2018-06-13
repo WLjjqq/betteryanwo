@@ -26,4 +26,11 @@ public class PayOrderDaoTest extends BaseTest {
         payOrderDao.updatePayStatus(2, 1, 0);
 
     }*/
+    @Test
+    public void test1(){
+        PayOrder payOrder = new PayOrder();
+        payOrder.setId(1);
+        payOrder.setStatus(2);
+        payOrderDao.update(payOrder);
+    }
 }

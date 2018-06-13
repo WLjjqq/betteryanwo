@@ -4,8 +4,11 @@ import com.betteryanwo.dto.Result;
 import com.betteryanwo.entity.Cart;
 import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.entity.Order;
+import com.betteryanwo.entity.OrderLog;
+import com.betteryanwo.enums.OrderType;
 import com.betteryanwo.exception.OrderException;
 import com.betteryanwo.service.CartItemService;
+import com.betteryanwo.service.OrderLogService;
 import com.betteryanwo.service.OrderService;
 import com.betteryanwo.service.ShopCartService;
 import com.betteryanwo.util.OrderUtil;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,66 +45,81 @@ public class OrderController {
     ShopCartService shopCartService;
     @Autowired
     CartItemService cartItemService;
+    @Autowired
+    OrderLogService orderLogService;
+
+
     /**
-     * 添加订单
-     * @param userId
+     * 根据订单号查询订单详情
+     * @param request
+     * @param session
+     * @param model
      * @param orderSerial
-     * @param isInvoice
      * @return
      */
-    @RequestMapping(value = "/insertOrder",method = RequestMethod.GET)
-    @ResponseBody
-    public Result insertOrder(@RequestParam("userId") Long userId,
-                              @RequestParam("orderSerial") String orderSerial,
-                              @RequestParam("isInvoice") Integer isInvoice){
-        try{
-            Order insertOrder = orderService.insert(userId, orderSerial, isInvoice);
-            return new Result(true,insertOrder,"订单添加成功");
-        }catch (Exception e){
-            e.printStackTrace();
-            return new Result(false,null,"订单添加失败");
-        }
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public String orderInfo(HttpServletRequest request, HttpSession session, Model model,
+                            @RequestParam(value = "orderSerial") String orderSerial){
+            try{
+                if(null==orderSerial || StringUtils.isEmpty(orderSerial)){
+                    return "redirect:/info";
+                }
+                Order order = orderService.getOrderByOrderSerial(orderSerial);
+                if(null == order){
+                    return "redirect:/500";
+                }
+                String msg = (String) session.getAttribute("msg");
 
-    }
-
-    /**
-     * 更新订单状态
-     * @param id
-     * @param shoppingStatus
-     * @return
-     */
-    @RequestMapping(value = "/update",method = RequestMethod.GET)
-    @ResponseBody
-    public Result updateOrder(@RequestParam("id") Long id,
-                              @RequestParam("shoppingStatus") Integer shoppingStatus){
-        try {
-            Order order = new Order();
-            order.setId(id);
-            order.setShoppingStatus(shoppingStatus);
-            orderService.updateOrder(order);
-            return new Result(true,null,"订单状态修改成功");
-        }catch (Exception e){
-            e.printStackTrace();
-            return new Result(false,null,"订单状态修改失败");
-        }
+                if (!StringUtils.isEmpty(msg)) {
+                    model.addAttribute("msg", msg);
+                    session.removeAttribute("msg");
+                }
+                model.addAttribute("order", order);
+                return "/info";
+            }catch (Exception e){
+                e.printStackTrace();
+                model.addAttribute("msg", e.getMessage());
+                return "500";
+            }
     }
 
     /**
      * 订单取消
-     * @param orderId
+     * @param userId
      * @param orderSerial
      * @return
      */
-    @RequestMapping(value = "/delete",method = RequestMethod.GET)
+    @RequestMapping(value = "/cancel",method = RequestMethod.GET)
     @ResponseBody
-    public Result deleteOrder(@RequestParam("orderId") Long orderId,
+    public Result deleteOrder(HttpServletRequest request, HttpSession session, Model model,
+                              @RequestParam("userId") Long userId,
                               @RequestParam("orderSerial") String orderSerial){
         try {
-            orderService.deleteOrder(orderId,orderSerial);
-            return new Result(true,null,"订单删除成功");
+            model.addAttribute("content","dingdan");
+            if(null ==orderSerial || orderSerial.isEmpty()){
+                model.addAttribute("msg", "订单号不能为空");
+                return new Result(false,"订单号不能为空");
+            }
+            Order order = orderService.getByUserIdAndOrderSerial(userId, orderSerial);
+            if (null == order) {
+                model.addAttribute("msg", "未找到该订单");
+                return new Result(false,"未找到该订单");
+            }
+            if (3 == order.getStatus()) {
+                session.setAttribute("msg", "订单已经取消,请勿重复提交");
+                return new Result(false,"订单已经取消,请勿重复提交");
+            }
+            // 更新订单状态
+            order.setStatus(3);
+            order.setDateUpdated(new Date());
+            orderService.updateOrder(order);
+            orderLogService.insert(new OrderLog(new Date(), "用户", OrderType.CANCEL.getMessage(), order.getOrderSerial()));
+            session.setAttribute("msg", "取消订单成功");
+            return new Result(true,"取消订单成功");
         }catch (Exception e){
             e.printStackTrace();
-            return new Result(false,null,"订单删除失败");
+            model.addAttribute("msg", e.getMessage());
+            return new Result(false,null,"取消订单异常");
         }
     }
     /**

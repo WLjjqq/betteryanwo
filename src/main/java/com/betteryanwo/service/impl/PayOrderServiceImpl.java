@@ -26,7 +26,7 @@ public class PayOrderServiceImpl implements PayOrderService {
     }
 
     @Override
-    public int updatePayOrderStatus(Integer payId, Integer newStatus, Integer oldStatus) {
-        return 0;
+    public int updatePayOrder(PayOrder payOrder) {
+        return payOrderDao.update(payOrder);
     }
 }
