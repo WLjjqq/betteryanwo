@@ -51,7 +51,7 @@
         collection:对关联查询到多条记录映射到集合中
         property:映射到cart类中的哪个属性
         ofType:要映射到集合中pojo的属性 -->
-		<collection property="cartItems" ofType="com.betteryanwo.entity.CartInfo">
+		<collection property="cartItems" ofType="com.betteryanwo.entity.CartItem">
 			<!-- id：订单明细的唯一标识,property:要将订单明细的唯一标识映射到Cartdetail的哪个属性 -->
 			<id column="id" property="id"/>
 			<result column="itemNum" property="itemNum"/>

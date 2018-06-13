@@ -81,7 +81,7 @@ public interface CartItemDao {
      * @return
      */
     int selectCartInfoByGoodsIdAndCartId(@Param("goodsId") Long goodsId,
-                                                              @Param("cartId") Long cartId);
+                                          @Param("cartId") Long cartId);
 
     List<Map<String,Object>> getNumAndPrice(@Param("goodsId") Long goodsId,
                                             @Param("cartId") Long cartId);

@@ -82,4 +82,5 @@ public interface CartItemService {
      * @return
      */
     List<Map<String, Object>> getNumAndPrice(Long goodsId, Long cartId);
+
 }

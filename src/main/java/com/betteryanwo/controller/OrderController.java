@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class OrderController {
      * @return
      */
     @RequestMapping(value = "/add",method = RequestMethod.GET)
-    public String addOrder(Model model){
+    public String addOrder(HttpSession session, Model model){
         try{
             return "redirect:/order/confirm";
         }catch (Exception e){
@@ -125,7 +126,9 @@ public class OrderController {
      */
     @ResponseBody
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
-    public Result confirmOrder(Integer isInvoice, String orderSerial,Long userId) {
+    public Result confirmOrder(@RequestParam("isInvoice") Integer isInvoice,
+                               String orderSerial,
+                               @RequestParam("userId") Long userId) {
         try{
             Cart cart = shopCartService.getByUserId(userId);
             if(null==cart){

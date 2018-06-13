@@ -54,6 +54,8 @@ public interface ShopCartService {
      * @return
      */
     int insert(Cart entity);
+    Map<String,Object> insert(Long userId, Cart cart, Long goodsId, Integer itemNum);
+
 
     /**
      * 删除购物车

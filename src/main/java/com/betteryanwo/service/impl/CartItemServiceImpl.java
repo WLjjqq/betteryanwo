@@ -107,4 +107,5 @@ public class CartItemServiceImpl implements CartItemService {
     public List<Map<String, Object>> getNumAndPrice(Long goodsId, Long cartId) {
         return cartItemDao.getNumAndPrice(goodsId,cartId);
     }
+
 }

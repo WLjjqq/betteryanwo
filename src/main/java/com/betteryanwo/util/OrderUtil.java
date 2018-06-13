@@ -1,6 +1,5 @@
 package com.betteryanwo.util;
-
-import com.betteryanwo.entity.CartInfo;
+import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.exception.OrderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,13 +47,13 @@ public class OrderUtil {
         return decimalFormat.format(num);
     }
 
-    public static BigDecimal calculateCart(List<CartInfo> cartItemList){
+    public static BigDecimal calculateCart(List<CartItem> cartItemList){
         try {
             if (null == cartItemList || cartItemList.size() == 0) {
                 return null;
             }
             BigDecimal totalPrice = new BigDecimal(0);
-            for (CartInfo ci : cartItemList) {
+            for (CartItem ci : cartItemList) {
                 totalPrice = ci.getPrice().add(totalPrice);
             }
             return totalPrice;

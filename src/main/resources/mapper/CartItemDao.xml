@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.betteryanwo.dao.CartItemDao">
-	<resultMap type="com.betteryanwo.entity.CartInfo" id="cartInfoResult">
+	<resultMap type="com.betteryanwo.entity.CartItem" id="cartInfoResult">
 		<id column="id" property="id" />
 		<result column="itemNum" property="itemNum" />
 		<result column="cartId" property="cartId" />
@@ -43,7 +43,7 @@
 	</select>
 
 	<!-- 查询所有购物车 -->
-	<select id="getAll" resultType="com.betteryanwo.entity.CartInfo">
+	<select id="getAll" resultType="com.betteryanwo.entity.CartItem">
 		SELECT
 		id,
 		itemNum,
@@ -55,8 +55,8 @@
 	</select>
 
 	<!-- 根据实体查询购物项 -->
-	<select id="getByCartItem" parameterType="com.betteryanwo.entity.CartInfo"
-			resultType="com.betteryanwo.entity.CartInfo">
+	<select id="getByCartItem" parameterType="com.betteryanwo.entity.CartItem"
+			resultType="com.betteryanwo.entity.CartItem">
 		SELECT
 		id,
 		itemNum,
@@ -69,12 +69,13 @@
 			<if test="id != null"> id = #{id} </if>
 			<if test="itemNum != null"> and itemNum = #{itemNum} </if>
 			<if test="cartId != null"> and cartId = #{cartId} </if>
+			<if test="goods.GoodsId !=null">and goods_id=#{goods.GoodsId}</if>
 		</where>
 	</select>
 
 	<!-- 根据购物车ID查询购物项 -->
 	<select id="getAllByCartId" parameterType="java.lang.Long"
-			resultType="com.betteryanwo.entity.CartInfo">
+			resultType="com.betteryanwo.entity.CartItem">
 		SELECT
 		id,
 		itemNum,
@@ -88,7 +89,7 @@
 	</select>
 
 	<!-- 添加购物项 -->
-	<insert id="insert" parameterType="com.betteryanwo.entity.CartInfo">
+	<insert id="insert" parameterType="com.betteryanwo.entity.CartItem">
 		INSERT INTO cart_info
 		(itemNum,cartId,goods_id,price)
 		VALUES (#{itemNum},
@@ -110,7 +111,7 @@
 	</delete>
 
 	<!-- 更新购物车 -->
-	<update id="update" parameterType="com.betteryanwo.entity.CartInfo">
+	<update id="update" parameterType="com.betteryanwo.entity.CartItem">
 		UPDATE cart_info
 		<set>
 			<if test="itemNum != null"> itemNum = #{itemNum},</if>
@@ -144,4 +145,6 @@
 		<if test="goodsId !=null">goods_id=#{goodsId}</if>
 		group by id
 	</select>
+
+
 </mapper>

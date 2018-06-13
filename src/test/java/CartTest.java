@@ -1,11 +1,9 @@
 import com.betteryanwo.dao.ShopCartDao;
 import com.betteryanwo.entity.Cart;
-import com.betteryanwo.entity.CartInfo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
