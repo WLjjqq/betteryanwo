@@ -1,5 +1,6 @@
 package com.betteryanwo.dao;
 
+import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.entity.CartItem;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +41,9 @@ public interface CartItemDao {
      * @param cartId
      * @return
      */
-    List<CartItem> getAllByCartId(Long cartId);
+    List<CartItem> getAllByCartId(@Param("cartId") Long cartId);
 
+    List<CartItemDto> getAllByCartId2(@Param("cartId") Long cartId);
     /**
      * 添加购物项
      * @param entity

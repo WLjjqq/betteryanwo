@@ -1,27 +1,20 @@
 package com.betteryanwo.controller;
 
+import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.dto.Result;
 import com.betteryanwo.entity.Cart;
 import com.betteryanwo.entity.CartItem;
-import com.betteryanwo.entity.Goods;
 import com.betteryanwo.exception.OrderException;
 import com.betteryanwo.service.CartItemService;
 import com.betteryanwo.service.GoodsService;
 import com.betteryanwo.service.ShopCartService;
-import com.betteryanwo.util.OrderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -29,7 +22,7 @@ import java.util.Map;
  * Date:18-6-4
  */
 @Controller
-@RequestMapping(value = "/shopcart")
+@RequestMapping(value = "/cart")
 public class ShopCartController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -69,14 +62,14 @@ public class ShopCartController {
 
     /**
      * 删除购物车项信息。
-     * @param infoId 购物车详表ID
+     * @param itemId 购物车详表ID
      * @return
      */
-    @RequestMapping(value ="/deleteShopCartInfo",method = RequestMethod.GET)
+    @RequestMapping(value ="/deleteCartItem/{itemId}",method = RequestMethod.DELETE)
     @ResponseBody
-    public Result deleteCartInfo(@RequestParam("infoId") Long infoId){
+    public Result deleteCartInfo(@PathVariable("itemId") Long itemId){
         try {
-            cartItemService.delete(infoId);
+            cartItemService.delete(itemId);
             return new Result(true,"删除成功",null);
         }catch (Exception e){
             e.printStackTrace();
@@ -89,9 +82,9 @@ public class ShopCartController {
      * @param cartId 购物车ID
      * @return
      */
-    @RequestMapping(value ="/deleteShopCart",method = RequestMethod.GET)
+    @RequestMapping(value ="/deleteShopCart/{cartId}",method = RequestMethod.DELETE)
     @ResponseBody
-    public Result deleteCart(@RequestParam("cartId") Long cartId){
+    public Result deleteCart(@PathVariable("cartId") Long cartId){
         try {
             cartItemService.deleteByCartId(cartId);
             shopCartService.delete(cartId);
@@ -118,7 +111,7 @@ public class ShopCartController {
 
         try {
             //查看这个用户有购物车没有
-            Cart cart = getCart(userId);
+            Cart cart = shopCartService.getByUserId(userId);
             if(cart == null) {
                 Cart cart1 = new Cart();
             }
@@ -138,8 +131,22 @@ public class ShopCartController {
      * 获取购物车
      * @return 购物车
      */
-    private Cart getCart(Long userId) {
-            Cart cart = shopCartService.getByUserId(userId);
-            return cart;
+    @RequestMapping(value = "/getCart",method = RequestMethod.GET)
+    @ResponseBody
+    private Result getCart(@RequestParam("userId") Long userId) {
+            try {
+                Cart cart = shopCartService.getByUserId(userId);
+                List<CartItemDto> cartItems = cartItemService.getAllByCartId2(cart.getId());
+                if(null == cart){
+                    Cart cart1 = new Cart();
+                    cart1.setUserId(userId);
+                }
+
+                return new Result(true,cartItems,"返回成功");
+            }catch (Exception e){
+                e.printStackTrace();
+                return new Result(true,"返回失败");
+            }
+
     }
 }

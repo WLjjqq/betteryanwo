@@ -9,7 +9,7 @@
 		<result column="itemNum" property="itemNum" />
 		<result column="cartId" property="cartId" />
 		<result column="price" property="price" />
-		<association property="goods" javaType="com.betteryanwo.entity.Goods">
+		<association property="goods" javaType="com.betteryanwo.entity.Goods" column="goods_id">
 			<!-- id：关联查询的唯一表示 column:指定用于唯一表示产品信息的列 javaType:映射到Product的哪个属性 -->
 			<id column="GoodsId" property="GoodsId" />
 			<result column="GoodsName" property="GoodsName" />
@@ -26,6 +26,65 @@
 			<result column="IsReconnend" property="IsReconnend" />
 		</association>
 	</resultMap>
+
+	<!-- 根据购物车ID查询购物项 -->
+	<select id="getAllByCartId" parameterType="java.lang.Long"
+			resultMap="cartInfoResult">
+		SELECT
+		id,
+		itemNum,
+		cartId,
+		GoodsId,
+		GoodsName,
+		GPrice,
+		GTypeID,
+		GIntro,
+		GImage,
+		GCount,
+		GSail,
+		GWeight,
+		GDateTime,
+		GSize,
+		IsHot,
+		IsReconnend,
+		price
+		FROM
+		cart_info
+		inner join goods
+		on cart_info.goods_id=goods.GoodsId
+		WHERE
+		cartId = #{cartId}
+	</select>
+
+	<!--统计购物项-->
+	<select id="getAllByCartId2" parameterType="java.lang.Long"
+			resultType="com.betteryanwo.dto.CartItemDto">
+		SELECT
+		a.SNum,
+		a.Sprice,
+		cart_info.id,
+		cart_info.itemNum,
+		cart_info.cartId,
+		cart_info.goods_id,
+		cart_info.price,
+		goods.GoodsName,
+		goods.GPrice
+		from
+		(SELECT
+		SUM(itemNum) SNum,
+		SUM(price) Sprice,
+		cartId
+		FROM
+		cart_info
+		WHERE
+		cartId=#{cartId}
+		GROUP BY cartId ) a
+		inner join cart_info
+		on a.cartId=cart_info.cartId
+		inner join goods
+		on cart_info.goods_id=goods.GoodsId
+	</select>
+
 	<!-- 根据ID查询购物项 -->
 	<select id="getById" resultMap="cartInfoResult">
 	SELECT
@@ -69,24 +128,10 @@
 			<if test="id != null"> id = #{id} </if>
 			<if test="itemNum != null"> and itemNum = #{itemNum} </if>
 			<if test="cartId != null"> and cartId = #{cartId} </if>
-			<if test="goods.GoodsId !=null">and goods_id=#{goods.GoodsId}</if>
 		</where>
 	</select>
 
-	<!-- 根据购物车ID查询购物项 -->
-	<select id="getAllByCartId" parameterType="java.lang.Long"
-			resultType="com.betteryanwo.entity.CartItem">
-		SELECT
-		id,
-		itemNum,
-		cartId,
-		goods_id,
-		price
-		FROM
-		cart_info
-		WHERE
-		cartId = #{cartId}
-	</select>
+
 
 	<!-- 添加购物项 -->
 	<insert id="insert" parameterType="com.betteryanwo.entity.CartItem">
@@ -121,7 +166,7 @@
 		WHERE
 		id = #{id}
 	</update>
-	
+
 	<!--在购物项中根据商品ID和购物车ID查看有没有这个商品-->
 	<select id="selectCartInfoByGoodsIdAndCartId" parameterType="java.lang.Long"
 			resultType="int">
@@ -145,6 +190,4 @@
 		<if test="goodsId !=null">goods_id=#{goodsId}</if>
 		group by id
 	</select>
-
-
 </mapper>

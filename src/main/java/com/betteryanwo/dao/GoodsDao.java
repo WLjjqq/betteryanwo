@@ -25,6 +25,7 @@ public interface GoodsDao {
     List<Goods> listGoodsByTypeAndName(@Param("type") String type,
                                        @Param("name") String name);
 
+
     /**
      * 查询商品的库存
      * @param goodsId 商品id

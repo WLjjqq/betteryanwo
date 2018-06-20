@@ -1,5 +1,6 @@
 package com.betteryanwo.service;
 
+import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.entity.Cart;
 import com.betteryanwo.entity.CartItem;
 
@@ -25,6 +26,12 @@ public interface CartItemService {
      */
     List<CartItem> getAllByCartId(Long cartId);
 
+    /**
+     * 统计数量和价格
+     * @param cartId
+     * @return
+     */
+    List<CartItemDto> getAllByCartId2(Long cartId);
     /**
      * 根据购物项筛选
      * @param entity

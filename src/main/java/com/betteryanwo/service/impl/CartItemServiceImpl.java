@@ -1,14 +1,18 @@
 package com.betteryanwo.service.impl;
 
 import com.betteryanwo.dao.CartItemDao;
+import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.entity.Cart;
 import com.betteryanwo.entity.CartItem;
+import com.betteryanwo.entity.Goods;
 import com.betteryanwo.service.CartItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +35,11 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public List<CartItem> getAllByCartId(Long cartId) {
         return cartItemDao.getAllByCartId(cartId);
+    }
+
+    @Override
+    public List<CartItemDto> getAllByCartId2(Long cartId) {
+        return cartItemDao.getAllByCartId2(cartId);
     }
 
     @Override

@@ -61,6 +61,8 @@ public class GoodsController {
         return new Result(true,goods,"根据商品类别和商品名称查询商品");
     }
 
+
+
     /**
      * 商品库存统计
      * @param goodsId 商品ID

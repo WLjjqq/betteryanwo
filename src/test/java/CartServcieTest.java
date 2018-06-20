@@ -1,3 +1,5 @@
+import com.betteryanwo.dao.CartItemDao;
+import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.entity.CartItem;
 import com.betteryanwo.entity.Goods;
 import com.betteryanwo.service.CartItemService;
@@ -13,6 +15,9 @@ import java.util.Map;
  * Date:18-6-1
  */
 public class CartServcieTest extends BaseTest {
+    @Autowired
+    CartItemDao cartItemDao;
+
     @Autowired
     CartItemService cartItemService;
     @Test
@@ -38,4 +43,28 @@ public class CartServcieTest extends BaseTest {
         cartItem.setGoods(goods);
         cartItemService.getByCartItem(cartItem);
     }
+
+    @Test
+    public void test2(){
+        /*List<CartItemDto> cartItems = cartItemService.getAllByCartIdDto(3l);
+        for(CartItemDto cartItem:cartItems){
+            System.out.println(cartItem);
+        }*/
+        List<CartItem> cartItems = cartItemService.getAllByCartId(3l);
+        for(CartItem cartItem:cartItems){
+            System.out.println(cartItem);
+        }
+        /*List<CartItem> cartItems1 = cartItemDao.getAllByCartId(3l);
+        for(CartItem cartItem:cartItems1){
+            System.out.println(cartItem);
+        }*/
+    }
+    @Test
+    public void test3(){
+        List<CartItemDto> allByCartId2 = cartItemService.getAllByCartId2(3l);
+        for(CartItemDto cartItem:allByCartId2){
+            System.out.println(cartItem);
+        }
+    }
+
 }

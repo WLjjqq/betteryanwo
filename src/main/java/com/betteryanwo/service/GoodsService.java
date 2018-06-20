@@ -24,6 +24,8 @@ public interface GoodsService {
     List<Goods> listGoodsByTypeAndName(String type,
                                        String name);
 
+
+
     /**
      * 查询商品的库存
      * @param goodsId 商品ID

@@ -41,6 +41,7 @@ public class GoodsServiceImpl implements GoodsService {
         return goods;
     }
 
+
     /**
      * 对商品库存进行统计
      * @param goodsId 商品名称

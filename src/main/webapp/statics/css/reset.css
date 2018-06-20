@@ -1,0 +1,70 @@
+/* v3.0 | 201704
+   License: none (public domain)
+*/
+
+ 	
+
+
+dl, dt, dd, ol, ul, li,
+table, caption, tbody, tfoot, thead, tr, th, td,
+output  {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	box-sizing:border-box;
+    color: #999;
+    font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"微软雅黑";
+    /*font-family: "Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;*/ 
+    /*font-family: "微软雅黑";*/
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+input,button{
+	font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体"; 
+}
+
+#one {
+	line-height: 1.8;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a{
+	text-decoration: none;
+}
+input{
+	box-sizing: border-box;
+}
+textarea{
+	font-size: 13.3333px;
+	font-family: 'Microsoft YaHei';
+}
+textarea::-webkit-input-placeholder{ 
+	font-size: 13.3333px;
+	font-family: 'Microsoft YaHei';
+}
+/*textarea::input-placeholder{ 
+	font-size: 13.3333px;
+	font-family: arial;
+}*/
+a{
+	outline: none;
+}
