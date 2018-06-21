@@ -68,7 +68,8 @@
 		cart_info.goods_id,
 		cart_info.price,
 		goods.GoodsName,
-		goods.GPrice
+		goods.GPrice,
+		goods.GImage
 		from
 		(SELECT
 		SUM(itemNum) SNum,

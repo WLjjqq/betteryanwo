@@ -85,6 +85,12 @@ public interface CartItemDao {
     int selectCartInfoByGoodsIdAndCartId(@Param("goodsId") Long goodsId,
                                           @Param("cartId") Long cartId);
 
+    /**
+     * 查询数量和价格
+     * @param goodsId
+     * @param cartId
+     * @return
+     */
     List<Map<String,Object>> getNumAndPrice(@Param("goodsId") Long goodsId,
                                             @Param("cartId") Long cartId);
 

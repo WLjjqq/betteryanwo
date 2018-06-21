@@ -16,11 +16,11 @@ public class CartItemDto {
     private BigDecimal price;
     private Float GPrice;
     private String GoodsName;
-
+    private String GImage;
     public CartItemDto() {
     }
 
-    public CartItemDto(Integer SNum, BigDecimal sprice, Long id, Integer itemNum, Long cartId, Long goodsId, BigDecimal price, Float GPrice, String goodsName) {
+    public CartItemDto(Integer SNum, BigDecimal sprice, Long id, Integer itemNum, Long cartId, Long goodsId, BigDecimal price, Float GPrice, String goodsName, String GImage) {
         this.SNum = SNum;
         Sprice = sprice;
         this.id = id;
@@ -30,6 +30,7 @@ public class CartItemDto {
         this.price = price;
         this.GPrice = GPrice;
         GoodsName = goodsName;
+        this.GImage = GImage;
     }
 
     public Integer getSNum() {
@@ -104,6 +105,14 @@ public class CartItemDto {
         GoodsName = goodsName;
     }
 
+    public String getGImage() {
+        return GImage;
+    }
+
+    public void setGImage(String GImage) {
+        this.GImage = GImage;
+    }
+
     @Override
     public String toString() {
         return "CartItemDto{" +
@@ -116,6 +125,7 @@ public class CartItemDto {
                 ", price=" + price +
                 ", GPrice=" + GPrice +
                 ", GoodsName='" + GoodsName + '\'' +
+                ", GImage='" + GImage + '\'' +
                 '}';
     }
 }
