@@ -6,6 +6,7 @@ import com.betteryanwo.service.CartItemService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,4 +68,11 @@ public class CartServcieTest extends BaseTest {
         }
     }
 
+    @Test
+    public void test4(){
+        List<Long> ids = new ArrayList<>();
+        ids.add(5l);
+        ids.add(4l);
+        cartItemService.deleteBatch(ids);
+    }
 }

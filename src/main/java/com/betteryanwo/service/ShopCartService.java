@@ -26,7 +26,6 @@ public interface ShopCartService {
     Cart getByUserId(Long userId);
 
 
-
     /**
      * 获取所有购物车
      * @return

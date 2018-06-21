@@ -190,4 +190,13 @@
 		<if test="goodsId !=null">goods_id=#{goodsId}</if>
 		group by id
 	</select>
+
+	<!--批量删除购物项-->
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from cart_info
+		where cart_info.id in
+		<foreach item="idItem" collection="list" open="(" separator="," close=")">
+			#{idItem}
+		</foreach>
+	</delete>
 </mapper>

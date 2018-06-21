@@ -2235,10 +2235,10 @@ input[type="checkbox"] {
 }
 
 .form-control-static {
-  padding-top: 11px;
-  padding-bottom: 11px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   margin-bottom: 0;
-  min-height: 34px;
+  min-height: 17px;
 }
 .form-control-static.input-lg, .input-group-lg > .form-control-static.form-control,
 .input-group-lg > .form-control-static.input-group-addon,
@@ -6253,5 +6253,7 @@ button.close {
     display: none !important;
   }
 }
+
+
 
 /*# sourceMappingURL=bootstrap.css.map */

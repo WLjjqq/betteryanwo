@@ -90,4 +90,10 @@ public interface CartItemService {
      */
     List<Map<String, Object>> getNumAndPrice(Long goodsId, Long cartId);
 
+    /**
+     * list批量删除
+     * @param ids
+     * @return
+     */
+    int deleteBatch(List<Long> ids);
 }

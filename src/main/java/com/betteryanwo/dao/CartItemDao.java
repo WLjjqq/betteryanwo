@@ -88,4 +88,5 @@ public interface CartItemDao {
     List<Map<String,Object>> getNumAndPrice(@Param("goodsId") Long goodsId,
                                             @Param("cartId") Long cartId);
 
+    int deleteBatch(List<Long> ids);
 }

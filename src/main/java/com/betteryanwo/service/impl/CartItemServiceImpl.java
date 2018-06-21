@@ -117,4 +117,8 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItemDao.getNumAndPrice(goodsId,cartId);
     }
 
+    @Override
+    public int deleteBatch(List<Long> ids) {
+        return cartItemDao.deleteBatch(ids);
+    }
 }

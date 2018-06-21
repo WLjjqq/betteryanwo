@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,7 +42,7 @@ public class ShopCartController {
      * @param number 数量
      * @return
      */
-    @RequestMapping(value = "/updateShopCart", method = RequestMethod.GET)
+    @RequestMapping(value = "/updateShopCart", method = RequestMethod.PUT)
     @ResponseBody
     public Result updateShopCartNumber(@RequestParam("cartInfoId") Long cartInftoId,
                                        @RequestParam("number") Integer number) {
@@ -60,34 +61,28 @@ public class ShopCartController {
         }
     }
 
-    /**
-     * 删除购物车项信息。
-     * @param itemId 购物车详表ID
-     * @return
-     */
-    @RequestMapping(value ="/deleteCartItem/{itemId}",method = RequestMethod.DELETE)
-    @ResponseBody
-    public Result deleteCartInfo(@PathVariable("itemId") Long itemId){
-        try {
-            cartItemService.delete(itemId);
-            return new Result(true,"删除成功",null);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new Result(false,"网络错误，请重试",null);
-        }
-    }
 
     /**
-     * 删除整个购物车的购物项
-     * @param cartId 购物车ID
+     * 批量删除购物项,删除一个。
+     * @param ids 购物项ID
      * @return
      */
-    @RequestMapping(value ="/deleteShopCart/{cartId}",method = RequestMethod.DELETE)
+    @RequestMapping(value ="/deleteCart/{ids}",method = RequestMethod.DELETE)
     @ResponseBody
-    public Result deleteCart(@PathVariable("cartId") Long cartId){
+    public Result deleteCart(@PathVariable("ids") String ids){
         try {
-            cartItemService.deleteByCartId(cartId);
-            shopCartService.delete(cartId);
+            if(ids.contains("-")){
+                List<Long> del_ids = new ArrayList<>();
+                String[] sp_ids = ids.split("-");
+                for(String string:sp_ids){
+                    del_ids.add(Long.parseLong(string));
+                    cartItemService.deleteBatch(del_ids);
+                }
+            }else {
+                long id = Long.parseLong(ids);
+                cartItemService.delete(id);
+            }
+
             return new Result(true,"删除成功",null);
         }catch (Exception e){
             e.printStackTrace();
@@ -136,11 +131,12 @@ public class ShopCartController {
     private Result getCart(@RequestParam("userId") Long userId) {
             try {
                 Cart cart = shopCartService.getByUserId(userId);
-                List<CartItemDto> cartItems = cartItemService.getAllByCartId2(cart.getId());
                 if(null == cart){
                     Cart cart1 = new Cart();
                     cart1.setUserId(userId);
                 }
+                List<CartItemDto> cartItems = cartItemService.getAllByCartId2(cart.getId());
+
 
                 return new Result(true,cartItems,"返回成功");
             }catch (Exception e){

@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Create by 六
@@ -60,6 +62,15 @@ public class CartItemTest extends BaseTest{
     @Test
     public void test8(){
         cartItemDao.selectCartInfoByGoodsIdAndCartId(3l,3l);
+    }
+
+    @Test
+    public void test9(){
+        List<Long> ids = new ArrayList<>();
+        ids.add(6l);
+        ids.add(7l);
+        ids.add(8l);
+        cartItemDao.deleteBatch(ids);
     }
 }
 
