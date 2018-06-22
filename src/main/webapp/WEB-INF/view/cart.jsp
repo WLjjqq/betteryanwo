@@ -1,4 +1,4 @@
-    <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
         <%@    taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
         <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
         <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -119,7 +119,7 @@
         <span>全选</span>
         </div>
         <div class="operations">
-        <button class="btn btn-default" id="cart_delete_all_btn">删除</button>
+        <button class="btn btn-default" id="cart_delete_all_btn">删除选中的商品</button>
         </div>
 
 
@@ -137,7 +137,7 @@
         <strong class="price">¥<em id="J_Total" class="allprice">0.00</em></strong>
         </div>
         <div class="btn-area">
-        <a href="#" id="J_Go" class="submit-btn submit-btn-disabled" aria-label="请注意如果没有选择宝贝，将无法结算">
+        <a id="J_Go" class="submit-btn submit-btn-disabled" aria-label="请注意如果没有选择宝贝，将无法结算">
         <span>结&nbsp;算</span></a>
         </div>
         </div>
@@ -160,8 +160,7 @@
         //console.log(result);
         //1:显示购物车的数据
         build_cart_table(result);
-        //2:显示多少商品，合计多少
-        build_cart_count(result);
+
         }
         });
         });
@@ -177,16 +176,17 @@
         var goodsName=$("<td></td>").append(item.goodsName);
         var gprice=$("<td></td>").append("￥").append(item.gprice);
         var number=$("<td></td>").addClass("quantity-btn")
-        .append($("<button></button>")
-        .addClass("btn btn-default btn-smminus")
-        .attr("id","minus").attr("cartItemId",item.id).append("-"))
-        .append(" ")
-        .append($("<input style='width:45px;height:20px'/>")
-        .addClass("form-control-static quantity-display")
-        .val(item.itemNum))
-        .append(" ")
-        .append($("<button></button>").addClass("btn btn-default btn-sm plus")
-        .attr("id","plus").attr("cartItemId",item.id).append("+"));
+                .append($("<button></button>")
+                .addClass("btn btn-default btn-sm minus")
+                .attr("id","minus").attr("cartItemId",item.id).append("-"))
+                .append(" ")
+                .append($("<input style='width:45px;height:28px'/>")
+                .addClass("form-control-static quantity-display")
+                .val(item.itemNum))
+                .append(" ")
+                .append($("<button></button>")
+                .addClass("btn btn-default btn-sm plus")
+                .attr("id","plus").attr("cartItemId",item.id).append("+"));
         var sum=$("<td></td>").addClass("goods_price").append("￥").append(item.price);
         var delBtn = $("<button></button>").addClass("btn btn-primary btn-sm delete_btn")
         .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("删除");
@@ -333,23 +333,48 @@
                     var J_MiniCartNum=document.getElementById('J_MiniCartNum');
                     J_MiniCartNum.innerHTML=0;
             }
-
             setTotal();
         });
+
+        $(document).on("click","#check_all",function(){
+                if($(".check_item").is(":checked") || $(".check_all").is(":checked")){
+                var J_MiniCartNum=document.getElementById('J_MiniCartNum');
+                J_MiniCartNum.innerHTML=$(".check_item:checked").length;
+                }else{
+                var J_MiniCartNum=document.getElementById('J_MiniCartNum');
+                J_MiniCartNum.innerHTML=0;
+                }
+                setTotal();
+        });
+
+        var table = document.getElementById('cart_table'); // 购物车表格
+        var tr = table.children[1].rows; //行
+
             function setTotal() {
-            var selected = 0, price = 0;
-            var table = document.getElementById('cart_table'); // 购物车表格
-            var tr = table.children[1].rows; //行
-            var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
-            var J_Total=document.getElementById('J_Total');
-            for (var i = 0; i < tr.length; i++) {
-            if(tr[i].getElementsByTagName('input')[0].checked){
-            selected += parseInt(tr[i].getElementsByTagName('input')[1].value); //计算已选商品数目
-            price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1)); //计算总计价格
+                    var selected = 0, price = 0;
+
+                    //商品合计
+                    var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
+                    //总价格合计
+                    var J_Total=document.getElementById('J_Total');
+                    for (var i = 0; i < tr.length; i++) {
+                            if(tr[i].getElementsByTagName('input')[0].checked){
+                                selected += parseInt(tr[i].getElementsByTagName('input')[1].value); //计算已选商品数目
+                                price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1)); //计算总计价格
+                            }
+
+                    }
+
+                    J_SelectedItemsCount.innerHTML=selected;
+                    J_Total.innerHTML=price;
+
             }
-            }
-            J_SelectedItemsCount.innerHTML=selected;
-            J_Total.innerHTML=price;
-            }
+
+
+            //点击结算
+            $(document).on("click","#J_Go",function(){
+                window.location.replace("http://localhost:9000/order");
+
+            });
 
         </script>
