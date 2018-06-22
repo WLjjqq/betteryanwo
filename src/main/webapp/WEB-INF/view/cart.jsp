@@ -151,8 +151,8 @@
 
         <script type="text/javascript">
 
-        $(function(){
-        $.ajax({
+$(function(){
+    $.ajax({
         url:"http://localhost:9000/cart/getCart",
         data:"userId=2",
         type:"get",
@@ -160,12 +160,11 @@
         //console.log(result);
         //1:显示购物车的数据
         build_cart_table(result);
-
         }
         });
         });
         //显示购物车数据的方法
-        function build_cart_table(result){
+function build_cart_table(result){
         var cartItems=result.data;
         $.each(cartItems,function(index,item){
         var checkBoxTd = $("<td><input type='checkbox' class='check_item'/></td>");
@@ -192,7 +191,6 @@
         .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("删除");
         //为删除按钮添加一个自定义的属性来表示当前删除的员工id
         delBtn.attr("del-id",item.id);
-
                 $("<tr></tr>").attr("id",item.goodsId)
                 .append(checkBoxTd)
                 .append(goodsId)
@@ -268,14 +266,14 @@
         ids = ids.substring(0, ids.length-1);
 
         if(confirm("确认删除【"+goodsNames+"】吗？")){
-        $.ajax({
+$.ajax({
         url:"http://localhost:9000/cart/deleteCart/"+ids,
         type:"DELETE",
         success:function(result){
         alert(result.data);
             location.reload();
         }
-        });
+});
         }
         });
 
@@ -293,7 +291,6 @@
         $(this).siblings(".quantity-display").val(newCartNum);
         //修改相应的价格。
         var price=$(this).parents("tr").find("td:eq(4)").text().substring(1);
-        //alert(price);
         var a=price*newCartNum;
         $(this).parents("tr").find("td:eq(6)").empty().append("￥").append(a);
         setTotal();
@@ -303,14 +300,12 @@
         $("body").on("click","#plus",function () {
         $(this).parents("tr").find(".check_item").prop("checked",true);
         //获取到值
-        //var cartNum = $(this).parents("tr").find("td:eq(4)").find("input").val();
         var cartNum =$(this).siblings(".quantity-display").val();
         newCartNum = parseInt(cartNum);
         newCartNum++;
         $(this).siblings(".quantity-display").val(newCartNum);
         //修改相应的价格。
         var price=$(this).parents("tr").find("td:eq(4)").text().substring(1);
-        //alert(price);
         var a=price*newCartNum;
         $(this).parents("tr").find("td:eq(6)").empty().append("￥").append(a);
         setTotal();
@@ -333,9 +328,10 @@
                     var J_MiniCartNum=document.getElementById('J_MiniCartNum');
                     J_MiniCartNum.innerHTML=0;
             }
+
             setTotal();
         });
-
+        //点击全选按钮
         $(document).on("click","#check_all",function(){
                 if($(".check_item").is(":checked") || $(".check_all").is(":checked")){
                 var J_MiniCartNum=document.getElementById('J_MiniCartNum');
@@ -349,32 +345,45 @@
 
         var table = document.getElementById('cart_table'); // 购物车表格
         var tr = table.children[1].rows; //行
-
+        //商品合计
+        var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
+        //总价格合计
+        var J_Total=document.getElementById('J_Total');
             function setTotal() {
                     var selected = 0, price = 0;
-
-                    //商品合计
-                    var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
-                    //总价格合计
-                    var J_Total=document.getElementById('J_Total');
                     for (var i = 0; i < tr.length; i++) {
                             if(tr[i].getElementsByTagName('input')[0].checked){
                                 selected += parseInt(tr[i].getElementsByTagName('input')[1].value); //计算已选商品数目
                                 price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1)); //计算总计价格
                             }
-
                     }
-
                     J_SelectedItemsCount.innerHTML=selected;
                     J_Total.innerHTML=price;
 
             }
 
-
             //点击结算
-            $(document).on("click","#J_Go",function(){
-                window.location.replace("http://localhost:9000/order");
+$(document).on("click","#J_Go",function(){
+    var ids = "",num="",price="";
+    for (var i = 0; i < tr.length; i++) {
+        if(tr[i].getElementsByTagName('input')[0].checked){
+            ids += tr[i].getElementsByTagName('td')[1].innerHTML+"-";
+            num += parseInt(tr[i].getElementsByTagName('input')[1].value)+"-"; //计算已选商品数目
+            price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1))+"-"; //计算总计价格
 
+    }
+    }
+    ids = ids.substring(0, ids.length-1);
+    num = num.substring(0,num.length-1);
+    price = price.substring(0,price.length-1);
+             var userId=2;
+
+    $.ajax({
+        url:"http://localhost:9000/order/insertOrder/"+userId+"/"+ids+"/"+num+"/"+price,
+        type:"POST",
+    success:function(result){
+        alert(result.data);
+        }
+    });
             });
-
         </script>

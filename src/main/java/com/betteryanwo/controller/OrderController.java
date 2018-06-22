@@ -18,14 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -184,6 +182,61 @@ public class OrderController {
             e.printStackTrace();
         }
         return new Result(false, "订单添加异常");
+    }
+
+    /**
+     * 从购物车发送过来的数据，保存到订单中
+     * @param userId
+     * @param ids
+     * @param num
+     * @return
+     */
+    @RequestMapping(value = "/insertOrder/{userId}/{ids}/{num}/{price}",method = RequestMethod.POST)
+    @ResponseBody
+    public Result insertOrder(@PathVariable("userId") Long userId,
+                              @PathVariable("ids") String ids,
+                              @PathVariable("num") String num,
+                              @PathVariable("price") String price){
+        try {
+            if(ids.contains("-")){
+                List<Long> del_ids = new ArrayList<>();//存放id
+                String[] sp_ids = ids.split("-");
+                for(String string:sp_ids){
+                    del_ids.add(Long.parseLong(string));
+                }
+                List<Integer> item_num = new ArrayList<>();//存放数量
+                String[] sp_num = num.split("-");
+                for(String goods_num:sp_num){
+                    item_num.add(Integer.parseInt(goods_num));
+                }
+                List<Integer> goods_prices = new ArrayList<>();//存放价格
+                String[] sp_price = price.split("-");
+                Integer price_a=0;
+                for(String goods_price:sp_price){
+                    goods_prices.add(Integer.parseInt(goods_price));
+                    price_a=Integer.parseInt(goods_price)+price_a;
+                    System.out.println("price的值:"+Integer.parseInt(goods_price));
+                }
+                Cart cart = shopCartService.getByUserId(userId);
+                cart.setPrice(new BigDecimal(price_a));
+                shopCartService.update(cart);
+                List<CartItem> cartItems = cartItemService.getAllByCartId(cart.getId());
+                    CartItem[] cartItem = new CartItem[cartItems.size()];
+                        for (int i = 0; i < goods_prices.size(); i++) {
+                            cartItem[i] = new CartItem();
+                            cartItem[i].setId(cartItems.get(i).getId());
+                            cartItem[i].setItemNum(item_num.get(i));
+                            cartItem[i].setPrice(new BigDecimal(goods_prices.get(i)));
+                            cartItemService.update(cartItem[i]);
+                            System.out.println("修改后购物车项的值" + cartItem[i]);
+                    }
+            }
+            orderService.insert(userId,OrderUtil.getOrderId(),0);
+            return new Result(true,"保存成功",null);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false,"网络错误，请重试",null);
+        }
     }
 
 }
