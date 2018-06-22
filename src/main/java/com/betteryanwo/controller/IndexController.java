@@ -15,4 +15,13 @@ public class IndexController {
     public String redict() {
         return "cart";
     }
+
+    /**
+     * 用于跳转到order订单页面
+     * @return
+     */
+    @RequestMapping(value = "/order")
+    public String replace() {
+        return "order";
+    }
 }
