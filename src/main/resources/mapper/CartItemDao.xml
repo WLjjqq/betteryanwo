@@ -60,6 +60,7 @@
 	<select id="getAllByCartId2" parameterType="java.lang.Long"
 			resultType="com.betteryanwo.dto.CartItemDto">
 		SELECT
+		a.CId,
 		a.SNum,
 		a.Sprice,
 		cart_info.id,
@@ -72,6 +73,7 @@
 		goods.GImage
 		from
 		(SELECT
+		COUNT(id) CId,
 		SUM(itemNum) SNum,
 		SUM(price) Sprice,
 		cartId

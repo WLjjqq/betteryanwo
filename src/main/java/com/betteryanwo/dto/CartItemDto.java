@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Date:18-6-19
  */
 public class CartItemDto {
+    private Integer CId;
     private Integer SNum;
     private BigDecimal Sprice;
     private Long id;
@@ -20,7 +21,8 @@ public class CartItemDto {
     public CartItemDto() {
     }
 
-    public CartItemDto(Integer SNum, BigDecimal sprice, Long id, Integer itemNum, Long cartId, Long goodsId, BigDecimal price, Float GPrice, String goodsName, String GImage) {
+    public CartItemDto(Integer CId, Integer SNum, BigDecimal sprice, Long id, Integer itemNum, Long cartId, Long goodsId, BigDecimal price, Float GPrice, String goodsName, String GImage) {
+        this.CId = CId;
         this.SNum = SNum;
         Sprice = sprice;
         this.id = id;
@@ -31,6 +33,14 @@ public class CartItemDto {
         this.GPrice = GPrice;
         GoodsName = goodsName;
         this.GImage = GImage;
+    }
+
+    public Integer getCId() {
+        return CId;
+    }
+
+    public void setCId(Integer CId) {
+        this.CId = CId;
     }
 
     public Integer getSNum() {
@@ -116,7 +126,8 @@ public class CartItemDto {
     @Override
     public String toString() {
         return "CartItemDto{" +
-                "SNum=" + SNum +
+                "CId=" + CId +
+                ", SNum=" + SNum +
                 ", Sprice=" + Sprice +
                 ", id=" + id +
                 ", itemNum=" + itemNum +

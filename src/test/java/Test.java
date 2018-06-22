@@ -6,13 +6,14 @@
  */
 public class Test {
     public static void main(String[] args) {
-        int[] a=new int[20];
-        a[0]=1;
-        for(int i=0;i<a.length;i++){
-            a[i]=i+1;
-        }
-        for (int b=0;b<a.length;b++){
-            System.out.println(a[b]);
+        boolean a=true;
+        boolean b=false;
+        boolean c=true;
+        boolean d=false;
+        if(a && b){
+            System.out.println("你好");
+        }else {
+            System.out.println("不好");
         }
 
     }

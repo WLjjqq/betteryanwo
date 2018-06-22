@@ -173,13 +173,17 @@
         var goodsId=$("<td></td>")
         .append(item.goodsId).hide();
         var img=$("<td></td>").append($("<a></a>").
-		append($("<img height='50' width='50'></img>").addClass("p-img").attr("src",item.gimage)));
+        append($("<img height='50' width='50'></img>").addClass("p-img").attr("src",item.gimage)));
         var goodsName=$("<td></td>").append(item.goodsName);
         var gprice=$("<td></td>").append("￥").append(item.gprice);
         var number=$("<td></td>").addClass("quantity-btn")
-        .append($("<button></button>").addClass("btn btn-default btn-smminus").attr("id","minus").attr("cartItemId",item.id).append("-"))
+        .append($("<button></button>")
+        .addClass("btn btn-default btn-smminus")
+        .attr("id","minus").attr("cartItemId",item.id).append("-"))
         .append(" ")
-        .append($("<input style='width:45px;height:20px'/>").addClass("form-control-static quantity-display").val(item.itemNum))
+        .append($("<input style='width:45px;height:20px'/>")
+        .addClass("form-control-static quantity-display")
+        .val(item.itemNum))
         .append(" ")
         .append($("<button></button>").addClass("btn btn-default btn-sm plus")
         .attr("id","plus").attr("cartItemId",item.id).append("+"));
@@ -189,22 +193,16 @@
         //为删除按钮添加一个自定义的属性来表示当前删除的员工id
         delBtn.attr("del-id",item.id);
 
-        var mycars = new Array(20);
-        mycars[0]=1;
-        for(var i=0;i<mycars.length;i++){
-        mycars[i]=i+1;
-        }
-
-			$("<tr></tr>").addClass("trClass")
-			.append(checkBoxTd)
-			.append(goodsId)
-			.append(img)
-			.append(goodsName)
-			.append(gprice)
-			.append(number)
-			.append(sum)
-			.append(delBtn)
-			.appendTo("#cart_table tbody");
+                $("<tr></tr>").attr("id",item.goodsId)
+                .append(checkBoxTd)
+                .append(goodsId)
+                .append(img)
+                .append(goodsName)
+                .append(gprice)
+                .append(number)
+                .append(sum)
+                .append(delBtn)
+                .appendTo("#cart_table tbody");
 
         $(".check_item").prop("checked",true);
         $("#check_all").prop("checked",true);
@@ -212,15 +210,11 @@
         J_SelectedItemsCount.innerHTML=item.snum;
         var J_Total=document.getElementById('J_Total');
         J_Total.innerHTML=item.sprice;
+            var J_MiniCartNum=document.getElementById('J_MiniCartNum');
+            J_MiniCartNum.innerHTML=$(".check_item:checked").length;
         });
         }
 
-        function build_cart_count(result){
-        $("#sum_goods").empty();
-        $("#sum_price").empty();
-        $("#sum_goods").append("已选择"+" "+result.data[0].snum +" 件商品");
-        $("#sum_price").append("总价格￥："+result.data[0].sprice);
-        }
 
         //给删除按钮绑定单击事件
         $(document).on("click",".delete_btn",function(){
@@ -234,7 +228,8 @@
         url:"http://localhost:9000/cart/deleteCart/"+itemId,
         type:"DELETE",
         success:function(result){
-        alert(result.data);
+                alert(result.data);
+                $("#"+itemId).remove();
         }
         });
         }
@@ -278,6 +273,7 @@
         type:"DELETE",
         success:function(result){
         alert(result.data);
+            location.reload();
         }
         });
         }
@@ -328,23 +324,32 @@
         $(this).val(z);
         });
 
-        function setTotal() {
-        var selected = 0, price = 0;
-        var table = document.getElementById('cart_table'); // 购物车表格
-        var tr = table.children[1].rows; //行
-        var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
-        var J_Total=document.getElementById('J_Total');
-        for (var i = 0; i < tr.length; i++) {
-        if(tr[i].getElementsByTagName('input')[0].checked){
-        selected += parseInt(tr[i].getElementsByTagName('input')[1].value); //计算已选商品数目
-        price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1)); //计算总计价格
-        }
-        }
-        J_SelectedItemsCount.innerHTML=selected;
-        J_Total.innerHTML=price;
-        }
-
+        //点击勾选按钮，底下商品数量和价格进行统计。
         $(document).on("click",".check_item",function(){
-        setTotal();
+            if($(".check_item").is(":checked") || $(".check_all").is(":checked")){
+                    var J_MiniCartNum=document.getElementById('J_MiniCartNum');
+                    J_MiniCartNum.innerHTML=$(".check_item:checked").length;
+            }else{
+                    var J_MiniCartNum=document.getElementById('J_MiniCartNum');
+                    J_MiniCartNum.innerHTML=0;
+            }
+
+            setTotal();
         });
+            function setTotal() {
+            var selected = 0, price = 0;
+            var table = document.getElementById('cart_table'); // 购物车表格
+            var tr = table.children[1].rows; //行
+            var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
+            var J_Total=document.getElementById('J_Total');
+            for (var i = 0; i < tr.length; i++) {
+            if(tr[i].getElementsByTagName('input')[0].checked){
+            selected += parseInt(tr[i].getElementsByTagName('input')[1].value); //计算已选商品数目
+            price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1)); //计算总计价格
+            }
+            }
+            J_SelectedItemsCount.innerHTML=selected;
+            J_Total.innerHTML=price;
+            }
+
         </script>
