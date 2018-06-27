@@ -79,58 +79,58 @@ public class UsersServiceImpl implements UsersService {
        return u;
    }
 
-  public int insertUser(Users users){
-       String password=users.getUserPassword();
-       int u=0;
-      if (StringUtils.isEmpty(users.getEmail())){
-          throw new LoginException("邮箱不能为空！");
-      }
-      if (StringUtils.isEmpty(users.getUserName())){
-          throw new LoginException("用户名不能为空！");
-      }
-      if (StringUtils.isEmpty(users.getRealName())){
-          throw new LoginException("姓名不能为空！");
-      }
-      if (StringUtils.isEmpty(users.getUserPassword())){
-          throw new LoginException("密码不能为空！");
-      }
-      if (StringUtils.isEmpty(users.getCardId())){
-          throw new LoginException("身份证号码不能为空！");
-      }
-      if (StringUtils.isEmpty(users.getPhone())){
-          throw new LoginException("电话不能为空！");
-      }
+    public int insertUser(Users users){
+        String password=users.getUserPassword();
+        int u=0;
+        if (StringUtils.isEmpty(users.getEmail())){
+            throw new LoginException("邮箱不能为空！");
+        }
+        if (StringUtils.isEmpty(users.getUserName())){
+            throw new LoginException("用户名不能为空！");
+        }
+        if (StringUtils.isEmpty(users.getRealName())){
+            throw new LoginException("姓名不能为空！");
+        }
+        if (StringUtils.isEmpty(users.getUserPassword())){
+            throw new LoginException("密码不能为空！");
+        }
+        if (StringUtils.isEmpty(users.getCardId())){
+            throw new LoginException("身份证号码不能为空！");
+        }
+        if (StringUtils.isEmpty(users.getPhone())){
+            throw new LoginException("电话不能为空！");
+        }
 
-      if(!users.getEmail().matches(email)){
-          throw new LoginException("邮箱格式不正确！");
-      }
-      if(!users.getUserPassword().matches(pwd)){
-          throw new LoginException("密码格式不正确！");
-      }
-      if(!users.getRealName().matches(realName)){
-          throw new LoginException("姓名格式不正确！");
-      }
-      if(!users.getCardId().matches(cardId)){
-          throw new LoginException("身份证号格式不正确！");
-      }
-      if(!users.getPhone().matches(phone)){
-          throw new LoginException("联系电话格式不正确！");
-      }
-      try {
-          SecureRandom random = new SecureRandom();
-          byte[] salt = new byte[24];
-          random.nextBytes(salt);
-          String saltHex = PasswordHash.toHex(salt);
-          String hashPwd = PasswordHash.createHash(password + saltHex);
-          System.out.println("======================"+hashPwd);
-          System.out.println("======================"+saltHex);
-          users.setUserPassword(hashPwd);
-          u=usersDao.insertUser(users);
-          return u;
-      }catch (Exception e){
-          e.getMessage();
-      }
-      return u;
-   }
+        if(!users.getEmail().matches(email)){
+            throw new LoginException("邮箱格式不正确！");
+        }
+        if(!users.getUserPassword().matches(pwd)){
+            throw new LoginException("密码格式不正确！");
+        }
+        if(!users.getRealName().matches(realName)){
+            throw new LoginException("姓名格式不正确！");
+        }
+        if(!users.getCardId().matches(cardId)){
+            throw new LoginException("身份证号格式不正确！");
+        }
+        if(!users.getPhone().matches(phone)){
+            throw new LoginException("联系电话格式不正确！");
+        }
+        try {
+            /*SecureRandom random = new SecureRandom();
+            byte[] salt = new byte[24];
+            random.nextBytes(salt);
+            String saltHex = PasswordHash.toHex(salt);
+            String hashPwd = PasswordHash.createHash(password + saltHex);
+            System.out.println("======================"+hashPwd);
+            System.out.println("======================"+saltHex);
+            users.setUserPassword(hashPwd);*/
+            u=usersDao.insertUser(users);
+            return u;
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return u;
+    }
 
 }

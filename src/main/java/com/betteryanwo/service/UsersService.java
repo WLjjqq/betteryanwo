@@ -31,8 +31,8 @@ public interface UsersService {
      * Created by mamengna on 2018/6/4 15:25
      * Description：登录
      */
-    public Users login(Users users);
+     Users login(Users users);
 
-    public int insertUser(Users users);
+     int insertUser(Users users);
 
 }
