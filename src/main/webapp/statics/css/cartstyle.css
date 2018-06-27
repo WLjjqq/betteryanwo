@@ -40,13 +40,13 @@ body, button, input, select, textarea {
 .item-content .td {float: left;}
 
 /*商品信息*/
-.td-chk {width:30px;position: absolute;top:10px;left:10px}
-.td.td-item{float:left;width:100%;padding-left:30px ;}
+.td-chk {width:10px;position: absolute;top:10px;left:10px}
+.td.td-item{float:left;width:100%;padding-left:30px ;text-align:center}
 /*图片*/
 .td-item .item-info {margin: -3px 0px 0px 91px;}
 .item-content .item-pic a {text-align: center;}
-.item-content .item-pic {width: 80px; height: 80px; border: 1px solid #EEE; float: left;overflow: hidden;margin-top:20px;margin-left:3px;}	
-.td-item .item-basic-info { height: 40px; margin-top:20px; text-align:left}
+.item-content .item-pic {width: 80px; height: 80px; border: 1px solid #f3f8ee; float: left;overflow: hidden;margin-top:20px;margin-left:3px;}
+.td-item .item-basic-info { height: 40px; margin-top:20px; text-align:center}
 /*规格*/
 .td.td-info{position: absolute;left:0px;top:55px;width:100%;overflow: hidden;padding-left: 120px;line-height: 16px;}
 .td.td-info .item-props{width:100%;}

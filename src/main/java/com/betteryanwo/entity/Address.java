@@ -17,7 +17,7 @@ public class Address {
 
     private String County;          //区/县
 
-    private String Address;         //详细地址
+    private String Site;         //详细地址
 
     private String Consignee;       //收货人
 
@@ -26,14 +26,14 @@ public class Address {
     public Address() {
     }
 
-    public Address(Long addressId, Long userID, String country, String province, String city, String county, String address, String consignee, String consigneeTel) {
+    public Address(Long addressId, Long userID, String country, String province, String city, String county, String site, String consignee, String consigneeTel) {
         AddressId = addressId;
         UserID = userID;
         Country = country;
         Province = province;
         City = city;
         County = county;
-        Address = address;
+        Site = site;
         Consignee = consignee;
         ConsigneeTel = consigneeTel;
     }
@@ -86,12 +86,12 @@ public class Address {
         County = county;
     }
 
-    public String getAddress() {
-        return Address;
+    public String getSite() {
+        return Site;
     }
 
-    public void setAddress(String address) {
-        Address = address;
+    public void setSite(String site) {
+        Site = site;
     }
 
     public String getConsignee() {
@@ -119,7 +119,7 @@ public class Address {
                 ", Province='" + Province + '\'' +
                 ", City='" + City + '\'' +
                 ", County='" + County + '\'' +
-                ", Address='" + Address + '\'' +
+                ", Site='" + Site + '\'' +
                 ", Consignee='" + Consignee + '\'' +
                 ", ConsigneeTel='" + ConsigneeTel + '\'' +
                 '}';

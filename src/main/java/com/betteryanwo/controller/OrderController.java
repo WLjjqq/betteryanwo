@@ -1,16 +1,10 @@
 package com.betteryanwo.controller;
 
 import com.betteryanwo.dto.Result;
-import com.betteryanwo.entity.Cart;
-import com.betteryanwo.entity.CartItem;
-import com.betteryanwo.entity.Order;
-import com.betteryanwo.entity.OrderLog;
+import com.betteryanwo.entity.*;
 import com.betteryanwo.enums.OrderType;
 import com.betteryanwo.exception.OrderException;
-import com.betteryanwo.service.CartItemService;
-import com.betteryanwo.service.OrderLogService;
-import com.betteryanwo.service.OrderService;
-import com.betteryanwo.service.ShopCartService;
+import com.betteryanwo.service.*;
 import com.betteryanwo.util.OrderUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -45,6 +39,8 @@ public class OrderController {
     CartItemService cartItemService;
     @Autowired
     OrderLogService orderLogService;
+    @Autowired
+    CartOrderService cartOrderService;
 
 
     /**
@@ -185,58 +181,60 @@ public class OrderController {
     }
 
     /**
-     * 从购物车发送过来的数据，保存到订单中
+     * 从购物车发送过来的数据，修改购物车表的数据，把勾选的保存到购物车订单表中。
      * @param userId
      * @param ids
      * @param num
      * @return
      */
-    @RequestMapping(value = "/insertOrder/{userId}/{ids}/{num}/{price}",method = RequestMethod.POST)
+    @RequestMapping(value = "/uodateOrder/{userId}/{ids}/{num}/{price}",method = RequestMethod.POST)
     @ResponseBody
     public Result insertOrder(@PathVariable("userId") Long userId,
                               @PathVariable("ids") String ids,
                               @PathVariable("num") String num,
                               @PathVariable("price") String price){
         try {
-            if(ids.contains("-")){
-                List<Long> del_ids = new ArrayList<>();//存放id
+            if (ids.contains("-")) {
+                List<Long> del_ids = new ArrayList<>();//存放商品id
                 String[] sp_ids = ids.split("-");
-                for(String string:sp_ids){
+                for (String string : sp_ids) {
                     del_ids.add(Long.parseLong(string));
                 }
                 List<Integer> item_num = new ArrayList<>();//存放数量
                 String[] sp_num = num.split("-");
-                for(String goods_num:sp_num){
+                for (String goods_num : sp_num) {
                     item_num.add(Integer.parseInt(goods_num));
                 }
                 List<Integer> goods_prices = new ArrayList<>();//存放价格
                 String[] sp_price = price.split("-");
-                Integer price_a=0;
-                for(String goods_price:sp_price){
+                Integer price_a = 0;
+                for (String goods_price : sp_price) {
                     goods_prices.add(Integer.parseInt(goods_price));
-                    price_a=Integer.parseInt(goods_price)+price_a;
-                    System.out.println("price的值:"+Integer.parseInt(goods_price));
+                    price_a = Integer.parseInt(goods_price) + price_a;
                 }
+
                 Cart cart = shopCartService.getByUserId(userId);
                 cart.setPrice(new BigDecimal(price_a));
                 shopCartService.update(cart);
                 List<CartItem> cartItems = cartItemService.getAllByCartId(cart.getId());
-                    CartItem[] cartItem = new CartItem[cartItems.size()];
-                        for (int i = 0; i < goods_prices.size(); i++) {
-                            cartItem[i] = new CartItem();
-                            cartItem[i].setId(cartItems.get(i).getId());
-                            cartItem[i].setItemNum(item_num.get(i));
-                            cartItem[i].setPrice(new BigDecimal(goods_prices.get(i)));
-                            cartItemService.update(cartItem[i]);
-                            System.out.println("修改后购物车项的值" + cartItem[i]);
-                    }
+                CartItem[] cartItem = new CartItem[cartItems.size()];
+
+                for (int i = 0; i < goods_prices.size(); i++) {
+                    cartItem[i] = new CartItem();
+
+                    cartItem[i].setId(cartItems.get(i).getId());
+                    cartItem[i].setItemNum(item_num.get(i));
+                    cartItem[i].setPrice(new BigDecimal(goods_prices.get(i)));
+                    cartItemService.update(cartItem[i]);
+
+                }
             }
-            orderService.insert(userId,OrderUtil.getOrderId(),0);
             return new Result(true,"保存成功",null);
         }catch (Exception e){
             e.printStackTrace();
             return new Result(false,"网络错误，请重试",null);
         }
     }
+
 
 }

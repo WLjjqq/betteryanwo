@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.CartOrderDao">
+	<resultMap type="com.betteryanwo.entity.CartOrder" id="cartOrderResult">
+		<id column="id" property="id" />
+		<result column="goods_num" property="goodsNum" />
+		<result column="count_price" property="countPrice" />
+		<association property="goods" javaType="com.betteryanwo.entity.Goods" column="goods_id">
+			<!-- id：关联查询的唯一表示 column:指定用于唯一表示产品信息的列 javaType:映射到Product的哪个属性 -->
+			<id column="GoodsId" property="GoodsId" />
+			<result column="GoodsName" property="GoodsName" />
+			<result column="GPrice" property="GPrice" />
+			<result column="GTypeID" property="GTypeID" />
+			<result column="GIntro" property="GIntro" />
+			<result column="GImage" property="GImage" />
+			<result column="GCount" property="GCount" />
+			<result column="GSail" property="GSail" />
+			<result column="GWeight" property="GWeight" />
+			<result column="GDateTime" property="GDateTime" />
+			<result column="GSize" property="GSize" />
+			<result column="IsHot" property="IsHot" />
+			<result column="IsReconnend" property="IsReconnend" />
+		</association>
+	</resultMap>
+
+	<!-- 添加购物项 -->
+	<insert id="insert" parameterType="com.betteryanwo.entity.CartOrder">
+		INSERT INTO cart_order
+		(goods_num,goods_id,count_price)
+		VALUES (#{goodsNum}, #{goods.GoodsId},#{countPrice})
+	</insert>
+
+	<!--批量删除购物项-->
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from cart_order
+		where cart_order.id in
+		<foreach item="idItem" collection="list" open="(" separator="," close=")">
+			#{idItem}
+		</foreach>
+	</delete>
+</mapper>

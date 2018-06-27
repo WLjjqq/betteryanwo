@@ -12,25 +12,60 @@
         <result column="Province" property="Province" jdbcType="VARCHAR"/>
         <result column="City" property="City" jdbcType="VARCHAR"/>
         <result column="County" property="County" jdbcType="VARCHAR"/>
-        <result column="Address" property="Address" jdbcType="VARCHAR"/>
+        <result column="Site" property="Site" jdbcType="VARCHAR"/>
         <result column="Consignee" property="Consignee" jdbcType="VARCHAR"/>
         <result column="ConsigneeTel" property="ConsigneeTel" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Address_Sql">
-        AddressId,UserID,Country,Province,City,County,Address,Consignee,ConsigneeTel
+        AddressId,UserID,Country,Province,City,County,Site,Consignee,ConsigneeTel
     </sql>
-    <select id="getAddressById" parameterType="java.lang.Long" resultMap="Address_ResultMap">
+    <select id="getAddressById" parameterType="java.util.List" resultMap="Address_ResultMap">
         select
         <include refid="Address_Sql"/>
         from address address
-        where address.AddressId=#{id,jdbcType=BIGINT}
+        where AddressId in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id,jdbcType=BIGINT}
+        </foreach>
     </select>
 
-    <select id="getAddressIdByUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <select id="getAddressIdByUserId" parameterType="java.lang.Long" resultType="map">
         select AddressId
         from address
         where UserID=#{userId,jdbcType=BIGINT}
     </select>
 
+    <insert id="insertAddress" parameterType="address">
+        INSERT INTO address
+		(UserID,Country,Province,City,County,Site,Consignee,ConsigneeTel)
+		VALUES (#{UserID},
+		#{Country}, #{Province},#{City},#{County},#{Site},#{Consignee},#{ConsigneeTel})
+    </insert>
+
+    <delete id="delAddress" parameterType="java.lang.Long">
+        DELETE from address
+        where AddressId=#{addressId}
+    </delete>
+
+    <select id="getAddressByAddressId" parameterType="long" resultMap="Address_ResultMap">
+        select
+        <include refid="Address_Sql"/>
+        from address address
+        where AddressId = #{addressId}
+    </select>
+
+    <update id="updateAddress" parameterType="address">
+        UPDATE address
+        <set>
+            <if test="Country != null"> Country = #{Country},</if>
+            <if test="Province != null"> Province = #{Province},</if>
+            <if test="City != null"> City = #{City},</if>
+            <if test="County != null">County = #{County},</if>
+            <if test="Site != null">Site = #{Site},</if>
+            <if test="Consignee != null">Consignee = #{Consignee},</if>
+            <if test="ConsigneeTel != null">ConsigneeTel = #{ConsigneeTel}</if>
+        </set>
+        where AddressId = #{addressId}
+    </update>
 </mapper>

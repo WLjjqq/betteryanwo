@@ -24,4 +24,13 @@ public class IndexController {
     public String replace() {
         return "order";
     }
+
+    /**
+     * 点击提交订单跳转到支付页面
+     * @return
+     */
+    @RequestMapping(value = "/pay")
+    public String replaceToPay() {
+        return "pay";
+    }
 }

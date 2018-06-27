@@ -2,6 +2,7 @@ package com.betteryanwo.dao;
 
 import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.entity.CartItem;
+import com.betteryanwo.entity.Goods;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,4 +96,6 @@ public interface CartItemDao {
                                             @Param("cartId") Long cartId);
 
     int deleteBatch(List<Long> ids);
+
+    Goods selectByCartInfoId(Long cartInfoId);
 }
