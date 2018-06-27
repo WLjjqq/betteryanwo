@@ -17,22 +17,27 @@
         <result column="Integral" property="integral" />
         <result column="GradeId" property="gradeId" />
     </resultMap>
+    <sql id="User_colum">
+        UserId,UserName,RealName,UserSex,UserPassword,Email,Phone,CardID,RegTime,Integral,GradeId
+    </sql>
     <!-- 登录 -->
     <select id="userLogin" parameterType="com.betteryanwo.entity.Users" resultMap="UsersMap">
-	 select UserName,UserPassword
-	 from user
-	 where UserName=#{userName} and UserPassword=#{userPassword}
+	 select UserName,UserPassword from user where UserName=#{userName} and UserPassword=#{userPassword}
 	</select>
     <select id="getById" parameterType="com.betteryanwo.entity.Users" resultType="Long">
-     select * from user where UserId=#{userId}
+     select <include refid="User_colum"/>
+        from user where UserId=#{userId}
     </select>
     <select id="getByEmail" parameterType="com.betteryanwo.entity.Users" resultType="String">
-     select * from user where emial=#{email}
+     select  <include refid="User_colum"/> from user where emial=#{email}
     </select>
 
     <select id="getByUserPassword" parameterType="com.betteryanwo.entity.Users" resultMap="UsersMap">
-      select * from user where email=#{email} and UserPassword=#{userPassword}
+      select  <include refid="User_colum"/> from user where email=#{email}
     </select>
-
+    <insert id="insertUser" parameterType="com.betteryanwo.entity.Users">
+        insert into user (userName,realName,userSex,userPassword,Email,Phone,CardId,regTime)
+        value (#{userName},#{realName},#{userSex},#{userPassword},#{email},#{phone},#{cardId},NOW())
+    </insert>
 
 </mapper>

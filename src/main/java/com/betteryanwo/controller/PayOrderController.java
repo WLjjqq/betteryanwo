@@ -33,9 +33,7 @@ public class PayOrderController {
     //购物车项
     @Autowired
     private CartItemService cartItemService;
-    //用户
-    @Autowired
-    private UserService userService;
+
     //订单操作
     @Autowired
     private OrderLogService orderLogService;

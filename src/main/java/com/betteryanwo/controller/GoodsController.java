@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "/goods")
-public class GoodsController {
+public class    GoodsController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 

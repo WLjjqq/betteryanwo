@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.UserOrderDao">
+
+    <resultMap type="com.betteryanwo.entity.UserOrder" id="OrderMap">
+        <id column="id" property="id" />
+        <result column="order_serial" property="orderSerial"  />
+        <result column="GoodsName" property="GoodsName" />
+        <result column="GImage" property="GImage" />
+        <result column="GPrice" property="GPrice" />
+        <result column="item_num" property="itemNum"/>
+        <result column="price" property="price"  />
+        <result column="status" property="status" />
+        <result column="shopping_status" property="shoppingStatus" />
+        <result column="user_id" property="userId" />
+    </resultMap>
+
+
+    <select id="selUserOrder" parameterType="Long" resultMap="OrderMap">
+
+        SELECT i.id, o.order_serial,g.GoodsName,g.GImage,g.GPrice,i.item_num,i.price,o.status,o.shopping_status,o.user_id FROM orders o,goods g,order_item i  WHERE o.id=i.order_id AND i.goods_id=g.GoodsId AND o.user_id=#{userId}
+    </select>
+
+</mapper>

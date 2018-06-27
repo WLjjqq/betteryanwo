@@ -10,7 +10,7 @@ public interface UsersDao {
      * Created by mamengna on 2018/5/29 10:06
      * Description：登录
      */
-    Users  userLogin(Users users);
+    Users userLogin(Users users);
 
     Users getById(Long id);
     Users getByEmail(String email);
@@ -20,5 +20,11 @@ public interface UsersDao {
      * Description：查询密码
      */
     Users getByUserPassword(Users users);
+
+    /**
+     * Created by mamengna on 2018/6/5 9:17
+     * Description：注册
+     */
+    int insertUser(Users users);
 
 }

@@ -69,4 +69,15 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods getGoodsById(Long goodsId) {
         return goodsDao.getGoodsById(goodsId);
     }
+
+    public  List<Goods> listGoodsByType(){
+        List<Goods> list=goodsDao.listGoodsByType();
+        System.out.println(list);
+        return list;
+    }
+    public  List<Goods> listGoodsByType1(){
+        List<Goods> list=goodsDao.listGoodsByType1();
+        System.out.println(list);
+        return list;
+    }
 }

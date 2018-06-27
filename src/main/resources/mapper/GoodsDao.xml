@@ -80,4 +80,11 @@
             and GoodsId=#{id,jdbcType=BIGINT}
         </if>
     </select>
+
+    <select id="listGoodsByType" resultMap="Goods_ResultMap">
+        select <include refid="Goods_Sql"/> from goods where GTypeID=2
+    </select>
+    <select id="listGoodsByType1"  resultMap="Goods_ResultMap">
+        select <include refid="Goods_Sql"/> from goods where GTypeID=1
+    </select>
 </mapper>

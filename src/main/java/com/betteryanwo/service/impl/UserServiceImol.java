@@ -1,16 +1,13 @@
 package com.betteryanwo.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.betteryanwo.dao.UserDao;
 import com.betteryanwo.entity.User;
 import com.betteryanwo.service.UserService;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by 辉太狼 on 2018/5/28
  */
-@Service
 public class UserServiceImol implements UserService {
 	@Autowired
 	private UserDao userDao;

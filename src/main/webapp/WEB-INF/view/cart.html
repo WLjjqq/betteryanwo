@@ -47,8 +47,8 @@
         am-icon-fw"></i>个人中心</a></div>
                 </div>
                 <div class="topMessage mini-cart">
-                        <div class="menu-hd"><a id="mc-menu-hd" href="#" target="_top"><i class="am-icon-shopping-cart
-        am-icon-fw"></i><span>购物车</span><strong id="J_MiniCartNum" class="h">0</strong></a></div>
+                        <div class="menu-hd"><a id="mc-menu-hd" href="#" target="_top">
+                                <i class="am-icon-shopping-cart am-icon-fw"></i><span>购物车</span><strong id="J_MiniCartNum" class="h"></strong></a></div>
                 </div>
                 <div class="topMessage favorite">
                 </div>
@@ -90,9 +90,7 @@
                                 <div class="col-md-12">
                                         <table class="table table-hover" id="cart_table">
                                                 <thead>
-                                                <th>
 
-                                                </th>
                                                 <th style="display:none;">商品ID</th>
                                                 <th> </th>
                                                 <th>商品信息</th>
@@ -112,16 +110,7 @@
 
                         <!--去结算按钮-->
                         <div class="float-bar-wrapper">
-                                <div id="J_SelectAll2" class="select-all J_SelectAll">
-                                        <div class="cart-checkbox">
-                                                <input class="check-all check" id="check_all" name="select-all" value="true" type="checkbox">
-                                                <label for="J_SelectAllCbx2"></label>
-                                        </div>
-                                        <span>全选</span>
-                                </div>
-                                <div class="operations">
-                                        <button class="btn btn-default" id="cart_delete_all_btn">删除选中的商品</button>
-                                </div>
+
 
 
                                 <div class="float-bar-right">
@@ -197,33 +186,21 @@
     //显示购物车数据的方法
     function build_cart_table(result){
         var cartItems=result.data;
+        $("#J_MiniCartNum").append(result.data[0].cid);
         $.each(cartItems,function(index,item){
-            var checkBoxTd = $("<td><input type='checkbox' class='check_item'/></td>");
             var goodsId=$("<td></td>")
                 .append(item.goodsId).hide();
             var img=$("<td></td>").append($("<a></a>").
             append($("<img height='50' width='50'></img>").addClass("p-img").attr("src",item.gimage)));
             var goodsName=$("<td></td>").append(item.goodsName);
             var gprice=$("<td></td>").append("￥").append(item.gprice);
-            var number=$("<td></td>").addClass("quantity-btn")
-                .append($("<button></button>")
-                    .addClass("btn btn-default btn-sm minus")
-                    .attr("id","minus").attr("cartItemId",item.id).append("-"))
-                .append(" ")
-                .append($("<input style='width:45px;height:28px'/>")
-                    .addClass("form-control-static quantity-display")
-                    .val(item.itemNum))
-                .append(" ")
-                .append($("<button></button>")
-                    .addClass("btn btn-default btn-sm plus")
-                    .attr("id","plus").attr("cartItemId",item.id).append("+"));
+            var number=$("<td></td>").append(item.itemNum);
             var sum=$("<td></td>").addClass("goods_price").append("￥").append(item.price);
             var delBtn = $("<button></button>").addClass("btn btn-primary btn-sm delete_btn")
                 .append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("删除");
             //为删除按钮添加一个自定义的属性来表示当前删除的员工id
             delBtn.attr("del-id",item.id);
             $("<tr></tr>").attr("id",item.goodsId)
-                .append(checkBoxTd)
                 .append(goodsId)
                 .append(img)
                 .append(goodsName)
@@ -240,7 +217,7 @@
             var J_Total=document.getElementById('J_Total');
             J_Total.innerHTML=item.sprice;
             var J_MiniCartNum=document.getElementById('J_MiniCartNum');
-            J_MiniCartNum.innerHTML=$(".check_item:checked").length;
+            //J_MiniCartNum.innerHTML=$(".check_item:checked").length;
         });
     }
 
@@ -249,7 +226,7 @@
     $(document).on("click",".delete_btn",function(){
         //1、弹出是否确认删除对话框
         //alert($(this).parents("tr").find("td:eq(1)").text());
-        var goodsName=$(this).parents("tr").find("td:eq(3)").text();
+        var goodsName=$(this).parents("tr").find("td:eq(2)").text();
         var itemId = $(this).attr("del-id");
         if(confirm("确认删除【"+goodsName+"】吗？")){
             //确认，发送ajax请求删除即可
@@ -258,27 +235,12 @@
                 type:"DELETE",
                 success:function(result){
                     alert(result.data);
-                    $("#"+itemId).remove();
                 }
             });
+            location.reload();
         }
     });
 
-    //全选，全不选
-    $("#check_all").click(function(){
-        //当前的元素的checked属性。选中为true。attr获取的是自定义的属性的值。
-        //alert($(this).prop("checked"));
-        //每个选择都有一个类 check_item。让它的属性值和第一个的一样。
-        $(".check_item").prop("checked",$(this).prop("checked"));
-    });
-
-    //当底下的全部选中的时候，第一个也选中。
-    $(document).on("click",".check_item",function(){
-        //判断当前选择中的元素是否全选
-        //$(".check_item:checked") 匹配所有选中的被选中元素
-        var flag = $(".check_item:checked").length==$(".check_item").length;
-        $("#check_all").prop("checked",flag);
-    });
 
     //点击删除选中的商品按钮
     $("#cart_delete_all_btn").click(function(){
@@ -308,71 +270,6 @@
         }
     });
 
-    //数量的减少
-    $("body").on("click","#minus",function () {
-        $(this).parents("tr").find(".check_item").prop("checked",true);
-        //$(".check_item").prop("checked",true);
-        //获取到值
-        var cartNum =$(this).siblings(".quantity-display").val();
-        newCartNum = parseInt(cartNum);
-        newCartNum--;
-        if(newCartNum<0){
-            newCartNum=0;
-        }
-        $(this).siblings(".quantity-display").val(newCartNum);
-        //修改相应的价格。
-        var price=$(this).parents("tr").find("td:eq(4)").text().substring(1);
-        var a=price*newCartNum;
-        $(this).parents("tr").find("td:eq(6)").empty().append("￥").append(a);
-        setTotal();
-    });
-
-    //数量的增加
-    $("body").on("click","#plus",function () {
-        $(this).parents("tr").find(".check_item").prop("checked",true);
-        //获取到值
-        var cartNum =$(this).siblings(".quantity-display").val();
-        newCartNum = parseInt(cartNum);
-        newCartNum++;
-        $(this).siblings(".quantity-display").val(newCartNum);
-        //修改相应的价格。
-        var price=$(this).parents("tr").find("td:eq(4)").text().substring(1);
-        var a=price*newCartNum;
-        $(this).parents("tr").find("td:eq(6)").empty().append("￥").append(a);
-        setTotal();
-    });
-
-    $(".quantity-display").blur(function(){
-        var z = $(this).val();
-        if(z < 0){
-            z = 0;
-        }
-        $(this).val(z);
-    });
-
-    //点击勾选按钮，底下商品数量和价格进行统计。
-    $(document).on("click",".check_item",function(){
-        if($(".check_item").is(":checked") || $(".check_all").is(":checked")){
-            var J_MiniCartNum=document.getElementById('J_MiniCartNum');
-            J_MiniCartNum.innerHTML=$(".check_item:checked").length;
-        }else{
-            var J_MiniCartNum=document.getElementById('J_MiniCartNum');
-            J_MiniCartNum.innerHTML=0;
-        }
-
-        setTotal();
-    });
-    //点击全选按钮
-    $(document).on("click","#check_all",function(){
-        if($(".check_item").is(":checked") || $(".check_all").is(":checked")){
-            var J_MiniCartNum=document.getElementById('J_MiniCartNum');
-            J_MiniCartNum.innerHTML=$(".check_item:checked").length;
-        }else{
-            var J_MiniCartNum=document.getElementById('J_MiniCartNum');
-            J_MiniCartNum.innerHTML=0;
-        }
-        setTotal();
-    });
 
     var table = document.getElementById('cart_table'); // 购物车表格
     var tr = table.children[1].rows; //行
@@ -395,38 +292,7 @@
 
     //点击结算
     $(document).on("click","#J_Go",function(){
-        var ids = "",num="",price="";
-        for (var i = 0; i < tr.length; i++) {
-            if(tr[i].getElementsByTagName('input')[0].checked){
-                ids += tr[i].getElementsByTagName('td')[1].innerHTML+"-";
-                num += parseInt(tr[i].getElementsByTagName('input')[1].value)+"-"; //计算已选商品数目
-                price += parseFloat(tr[i].getElementsByTagName('td')[6].innerHTML.substring(1))+"-"; //计算总计价格
-            }
-        }
-        ids = ids.substring(0, ids.length-1);
-        alert(ids+"id");
-        num = num.substring(0,num.length-1);
-        alert(num+"num");
-        price = price.substring(0,price.length-1);
-        alert(price+"price");
-        var userId = 2;
-        //发送ajax请求。保存修改的数量。
-        $.ajax({
-            url:"http://localhost:9000/cartOrder/insert/"+userId+"/"+ids+"/"+num+"/"+price,
-            type:"POST",
-            success:function(result){
-                alert(result.data);
-            }
-        });
-
-        /*$.ajax({
-            url:"http://localhost:9000/order/uodateOrder/"+userId+"/"+ids+"/"+num+"/"+price,
-            type:"POST",
-            success:function(result){
-                alert(result.data);
-            }
-        });*/
-        //window.location.href = "http://localhost:9000/order";
+        window.location.href = "http://localhost:9000/order";
     });
 
 </script>

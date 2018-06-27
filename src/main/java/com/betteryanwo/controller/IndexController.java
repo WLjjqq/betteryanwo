@@ -13,6 +13,11 @@ public class IndexController {
     private final static org.slf4j.Logger Logger = LoggerFactory.getLogger(IndexController.class);
     @RequestMapping(value = {"", "/"})
     public String redict() {
+        return "homepage";
+    }
+
+    @RequestMapping(value = {"", "/cart"})
+    public String redictToCart() {
         return "cart";
     }
 

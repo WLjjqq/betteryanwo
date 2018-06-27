@@ -9,11 +9,11 @@
 		<style>
 			.cell-7{
 				float: left;
-				margin-bottom: 20px;
+				margin-bottom: 15px;
 				margin-right: 5px;
 			}
 			.cell-7 input{
-				width:110px;
+				width:105px;
 				height: 40px;
 				float: left;
 				padding-left: 7px;
@@ -21,7 +21,7 @@
 			}
 			.cell-5{
 				float: left;
-				margin-bottom: 20px;
+				margin-bottom: 15px;
 			}
 		</style>
 
@@ -65,7 +65,7 @@
 						<button class="layui-btn layui-btn-primary" lay-submit lay-filter="login">
 							<i><img src="/statics/images/icon-log.png" width="20" height="20"></i> 登录
 						</button><br/><br/><br/>
-						<a>还没账号？立即注册>></a>
+						<a href="/user/toReg">还没账号？立即注册>></a>
 
 					</div>0
 					<div class="beg-clear"></div>
@@ -118,7 +118,7 @@
                         if(res.success){
                             flag=1;
                             sessionStorage.setItem("user",JSON.stringify(res.user));
-                            location.href='index.jsp';
+                            location.href='/jump/toPcenter';
                         }else{
                             layer.alert(res.msg, {
                                 title: '系统提示',

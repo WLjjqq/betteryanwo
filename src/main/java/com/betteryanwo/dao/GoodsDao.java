@@ -47,4 +47,12 @@ public interface GoodsDao {
      * @return
      */
     Goods getGoodsById(@Param("id") Long id);
+
+    /**
+     * Created by mamengna on 2018/6/19 16:01
+     * Description：根据商品类别查询商品
+     */
+    List<Goods> listGoodsByType();
+
+    List<Goods> listGoodsByType1();
 }

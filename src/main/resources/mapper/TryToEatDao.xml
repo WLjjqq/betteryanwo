@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.betteryanwo.dao.TryToEatDao">
+    <resultMap type="com.betteryanwo.entity.TryToEat" id="TryToEatMap">
+        <result column="Eid" property="eId" />
+        <result column="CorporateName" property="corporateName" />
+        <result column="Caddress" property="cAddress" />
+        <result column="Tasting" property="tasting" />
+        <result column="Position" property="position" />
+        <result column="Applicant" property="applicant" />
+        <result column="Number" property="number" />
+        <result column="Tphone" property="pThone" />
+        <result column="Temail" property="pEmail" />
+        <result column="Remarks" property="remarks" />
+    </resultMap>
+
+    <insert id="addTryToEat" parameterType="com.betteryanwo.entity.TryToEat" >
+        INSERT INTO betteryanwo_db.trytoeat
+	(Eid,CorporateName,Caddress, Tasting,POSITION, Applicant, Number, Tphone, Temail, Remarks)
+	VALUES
+	(#{eId},#{corporateName}, #{cAddress},#{tasting},#{position}, #{applicant},#{number},#{pThone},
+	 #{pEmail}, #{remarks});
+
+    </insert>
+</mapper>
