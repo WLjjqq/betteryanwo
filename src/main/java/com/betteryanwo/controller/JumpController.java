@@ -1,6 +1,8 @@
 package com.betteryanwo.controller;
 
+import com.betteryanwo.dto.Result;
 import com.betteryanwo.entity.Goods;
+import com.betteryanwo.entity.Users;
 import com.betteryanwo.service.GoodsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -131,6 +135,14 @@ public class JumpController {
     public String toPcenter() {
         return "pcenter";
     }
+
+    @RequestMapping(value = "/session", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getSession(HttpSession session) {
+        Users user = (Users)session.getAttribute("user");
+        return new Result(true,user,"得到user的值");
+    }
+
 
 
 }

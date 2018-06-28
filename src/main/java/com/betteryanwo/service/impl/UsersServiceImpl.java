@@ -116,15 +116,17 @@ public class UsersServiceImpl implements UsersService {
         if(!users.getPhone().matches(phone)){
             throw new LoginException("联系电话格式不正确！");
         }
+
+
         try {
-            /*SecureRandom random = new SecureRandom();
+            SecureRandom random = new SecureRandom();
             byte[] salt = new byte[24];
             random.nextBytes(salt);
             String saltHex = PasswordHash.toHex(salt);
             String hashPwd = PasswordHash.createHash(password + saltHex);
             System.out.println("======================"+hashPwd);
             System.out.println("======================"+saltHex);
-            users.setUserPassword(hashPwd);*/
+            users.setUserPassword(hashPwd);
             u=usersDao.insertUser(users);
             return u;
         }catch (Exception e){

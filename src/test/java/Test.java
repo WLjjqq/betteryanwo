@@ -5,16 +5,36 @@
  * Date:18-6-21
  */
 public class Test {
+    private int id;
+    private String name;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public static void main(String[] args) {
-        boolean a=true;
-        boolean b=false;
-        boolean c=true;
-        boolean d=false;
-        if(a && b){
-            System.out.println("你好");
-        }else {
-            System.out.println("不好");
-        }
+        Test test = new Test();
+        System.out.println(test);
 
     }
 }

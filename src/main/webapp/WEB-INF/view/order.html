@@ -483,7 +483,6 @@
                 $.ajax({
                     type: 'Get',
                     url: "http://localhost:9000/cart/getCart",
-                    data: "userId=2",
                     datatype: "json",
                     success: function (result) {
                         for (var i = 0; i < result.data.length; i++) {

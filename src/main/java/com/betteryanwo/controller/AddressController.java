@@ -2,12 +2,14 @@ package com.betteryanwo.controller;
 
 import com.betteryanwo.dto.Result;
 import com.betteryanwo.entity.Address;
+import com.betteryanwo.entity.Users;
 import com.betteryanwo.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,14 +25,15 @@ public class AddressController {
 
     /**
      * 得到地址根据用户ID
-     * @param userId
+     * @param session 用户都保存在session中
      * @return
      */
     @RequestMapping(value = "/getAddress",method = RequestMethod.GET)
     @ResponseBody
-    public Result getAddress(@RequestParam("userId") Long userId) {
+    public Result getAddress(HttpSession session) {
         try {
-            List<Address> addressList = addressService.getAddressById(userId);
+            Users user = (Users)session.getAttribute("user");
+            List<Address> addressList = addressService.getAddressById(user.getUserId());
             if (addressList.size() == 0 && null == addressList && !addressList.isEmpty()) {
                 return new Result(false, "目前用户还没有地址，请添加地址");
             }

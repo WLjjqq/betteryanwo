@@ -4,6 +4,7 @@ import com.betteryanwo.dto.CartItemDto;
 import com.betteryanwo.dto.Result;
 import com.betteryanwo.entity.Cart;
 import com.betteryanwo.entity.CartItem;
+import com.betteryanwo.entity.Users;
 import com.betteryanwo.exception.OrderException;
 import com.betteryanwo.service.CartItemService;
 import com.betteryanwo.service.GoodsService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,24 +95,24 @@ public class ShopCartController {
     /**
      * 添加购物车
      * @param goodsId 商品ID
-     * @param userId 用户ID
+     * @param session 用户ID
      * @param number 修改的数量
      * @return
      */
     @RequestMapping(value = "/insertCart",method = RequestMethod.GET)
     @ResponseBody
     public Result insertShopCart(@RequestParam("goodsId") Long goodsId,
-                                 @RequestParam("userId") Long userId,
+                                 HttpSession session,
                                  @RequestParam("number") Integer number){
         Result result = new Result();
-
+        Users user = (Users)session.getAttribute("user");
         try {
             //查看这个用户有购物车没有
-            Cart cart = shopCartService.getByUserId(userId);
+            Cart cart = shopCartService.getByUserId(user.getUserId());
             if(cart == null) {
                 Cart cart1 = new Cart();
             }
-            shopCartService.insert(userId,cart,goodsId,number);
+            shopCartService.insert(user.getUserId(),cart,goodsId,number);
             return new Result<>(true, cart, "添加成功");
         }catch (OrderException oe){
                 return new Result(false, oe.getMessage());
@@ -128,16 +130,15 @@ public class ShopCartController {
      */
     @RequestMapping(value = "/getCart",method = RequestMethod.GET)
     @ResponseBody
-    private Result getCart(@RequestParam("userId") Long userId) {
+    private Result getCart(HttpSession  session) {
             try {
-                Cart cart = shopCartService.getByUserId(userId);
+                Users user = (Users)session.getAttribute("user");
+                Cart cart = shopCartService.getByUserId(user.getUserId());
                 if(null == cart){
                     Cart cart1 = new Cart();
-                    cart1.setUserId(userId);
+                    cart1.setUserId(user.getUserId());
                 }
                 List<CartItemDto> cartItems = cartItemService.getAllByCartId2(cart.getId());
-
-
                 return new Result(true,cartItems,"返回成功");
             }catch (Exception e){
                 e.printStackTrace();
