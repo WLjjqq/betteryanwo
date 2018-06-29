@@ -2,6 +2,7 @@ package com.betteryanwo.service;
 
 import com.betteryanwo.entity.Address;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -16,8 +17,9 @@ public interface AddressService {
      * @param userId
      * @return
      */
-    List<Address> getAddressById(Long userId);
+    //List<Address> getAddressById(Long userId);
 
+    Address getAddressById(Long userId);
     /**
      * 保存地址
      * @param address

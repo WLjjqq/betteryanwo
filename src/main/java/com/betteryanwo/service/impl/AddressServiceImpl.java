@@ -2,10 +2,12 @@ package com.betteryanwo.service.impl;
 
 import com.betteryanwo.dao.AddressDao;
 import com.betteryanwo.entity.Address;
+import com.betteryanwo.entity.Users;
 import com.betteryanwo.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -18,9 +20,10 @@ public class AddressServiceImpl implements AddressService {
     AddressDao addressDao;
 
     @Override
-    public List<Address> getAddressById(Long userId) {
+    public Address getAddressById(Long userId) {
         List<Map<String, Long>> addressId = addressDao.getAddressIdByUserId(userId);
-        List<Long> list = new ArrayList<>();
+        //List<Long> list = new ArrayList<>();
+        Address address=null;
         for(Map<String, Long> map:addressId){
             Set<String> k = map.keySet();
             Iterator<String> it = k.iterator();
@@ -29,12 +32,22 @@ public class AddressServiceImpl implements AddressService {
                 String key = it.next();
                 //有了键，就可以通过map集合的get方法获取对应的值
                 Long value =map.get(key);
-                list.add(value);
+                //list.add(value);
+                 address = addressDao.getAddressById(value);
             }
         }
 
-        return addressDao.getAddressById(list);
+        return address;
     }
+
+    /*@Override
+    public Address getAddressById(Long userId) {
+        long addressId = addressDao.getAddressIdByUserId(userId);
+        if(addressId<0){
+            addressId=0;
+        }
+        return addressDao.getAddressById(addressId);
+    }*/
 
     @Override
     public int insertAddress(Address address) {

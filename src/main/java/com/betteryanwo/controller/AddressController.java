@@ -33,11 +33,14 @@ public class AddressController {
     public Result getAddress(HttpSession session) {
         try {
             Users user = (Users)session.getAttribute("user");
-            List<Address> addressList = addressService.getAddressById(user.getUserId());
-            if (addressList.size() == 0 && null == addressList && !addressList.isEmpty()) {
+            if(null==user){
+                return new Result(false, "请先登陆！");
+            }
+            Address address = addressService.getAddressById(user.getUserId());
+            if (null==address) {
                 return new Result(false, "目前用户还没有地址，请添加地址");
             }
-            return new Result(true, addressList, "该用户有地址");
+            return new Result(true, address, "该用户有地址");
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "网络错误，请重试", null);
@@ -47,16 +50,24 @@ public class AddressController {
     /**
      * 保存地址
      * @param address
-     * @param userId
+     * @param session 用户保存到session中。
      * @return
      */
-    @RequestMapping(value = "/saveAddress/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveAddress", method = RequestMethod.POST)
     @ResponseBody
-    public Result insertAddress(@PathVariable("userId") Long userId,@Valid Address address){
+    public Result insertAddress(HttpSession session,@Valid Address address){
         try {
-            address.setUserID(userId);
-            int i = addressService.insertAddress(address);
-            return new Result(true,i,"保存成功");
+            Users user = (Users)session.getAttribute("user");
+            Address addressById = addressService.getAddressById(user.getUserId());
+            if(null==addressById){
+                address.setUserID(user.getUserId());
+                int i = addressService.insertAddress(address);
+                return new Result(true,i,"保存成功");
+            }else{
+                return new Result(false,"保存失败,您已经有地址了，请修改地址");
+            }
+
+
         }catch (Exception e){
             e.printStackTrace();
             return new Result(false,"保存失败");

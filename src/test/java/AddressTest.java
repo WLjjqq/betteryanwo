@@ -22,8 +22,9 @@ public class AddressTest extends BaseTest{
     }
     @Test
     public void test1(){
-        List<Map<String, Long>> addressIdByUserId = addressDao.getAddressIdByUserId(2l);
-        System.out.println(addressIdByUserId);
+       // List<Map<String, Long>> addressIdByUserId = addressDao.getAddressIdByUserId(2l);
+        Address address = addressDao.getAddressByAddressId(2l);
+        System.out.println(address);
     }
 
     @Autowired
@@ -52,5 +53,15 @@ public class AddressTest extends BaseTest{
         address.setAddressId(8l);
         address.setCity("瓦尔登湖");
         addressDao.updateAddress(address);
+    }
+
+    @Test
+    public void getAddressIdByUserId(){
+        addressDao.getAddressIdByUserId(2l);
+    }
+
+    @Test
+    public void getAddressById(){
+        addressService.getAddressById(2l);
     }
 }

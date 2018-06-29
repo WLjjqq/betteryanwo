@@ -211,12 +211,13 @@
 
             $(".check_item").prop("checked",true);
             $("#check_all").prop("checked",true);
-            var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
+           /* var J_SelectedItemsCount=document.getElementById('J_SelectedItemsCount');
             J_SelectedItemsCount.innerHTML=item.snum;
             var J_Total=document.getElementById('J_Total');
             J_Total.innerHTML=item.sprice;
-            var J_MiniCartNum=document.getElementById('J_MiniCartNum');
+            var J_MiniCartNum=document.getElementById('J_MiniCartNum');*/
             //J_MiniCartNum.innerHTML=$(".check_item:checked").length;
+            setTotal();
         });
     }
 
@@ -286,6 +287,7 @@
         }
         J_SelectedItemsCount.innerHTML=selected;
         J_Total.innerHTML=price;
+        alert(selected+"doudou");
 
     }
 

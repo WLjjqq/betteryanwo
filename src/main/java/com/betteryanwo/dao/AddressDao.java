@@ -2,6 +2,7 @@ package com.betteryanwo.dao;
 
 import com.betteryanwo.entity.Address;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,20 @@ import java.util.Map;
  * Date:18-5-29
  */
 public interface AddressDao {
+   /* *//**
+     * 根据用户ID得到地址ID
+     * @param userId
+     * @return
+     *//*
+    List<Map<String,Long>> getAddressIdByUserId(@Param("userId") Long userId);
+
+    *//**
+     * 根据地址ID得到地址的信息
+     * @param ids
+     * @return
+     *//*
+    List<Address> getAddressById(List<Long> ids);*/
+
     /**
      * 根据用户ID得到地址ID
      * @param userId
@@ -19,11 +34,11 @@ public interface AddressDao {
     List<Map<String,Long>> getAddressIdByUserId(@Param("userId") Long userId);
 
     /**
-     * 根据地址ID得到地址的信息
-     * @param ids
+     * 根据地址ID得到地址信息
+     * @param addressId
      * @return
      */
-    List<Address> getAddressById(List<Long> ids);
+    Address getAddressById(@Param("addressId") Long addressId);
 
     /**
      * 添加地址

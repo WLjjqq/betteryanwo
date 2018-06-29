@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -124,6 +125,8 @@ public class ShopCartController {
         }
     }
 
+
+
     /**
      * 获取购物车
      * @return 购物车
@@ -133,16 +136,22 @@ public class ShopCartController {
     private Result getCart(HttpSession  session) {
             try {
                 Users user = (Users)session.getAttribute("user");
+                if(null==user){
+                    return new Result(false,1,"请先进行登陆！");
+                }
                 Cart cart = shopCartService.getByUserId(user.getUserId());
                 if(null == cart){
-                    Cart cart1 = new Cart();
-                    cart1.setUserId(user.getUserId());
+                     cart = new Cart();
+                    cart.setUserId(user.getUserId());
                 }
                 List<CartItemDto> cartItems = cartItemService.getAllByCartId2(cart.getId());
-                return new Result(true,cartItems,"返回成功");
+                if(  null!=cartItems && !cartItems.isEmpty() && cartItems.size()!=0 ){
+                    return new Result(true,cartItems,"返回成功");
+                }
+                return new Result(false,2,"购物车为空");
             }catch (Exception e){
                 e.printStackTrace();
-                return new Result(true,"返回失败");
+                return new Result(false,"返回失败");
             }
 
     }

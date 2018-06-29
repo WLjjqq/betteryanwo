@@ -41,6 +41,8 @@ public class OrderController {
     OrderLogService orderLogService;
     @Autowired
     CartOrderService cartOrderService;
+    @Autowired
+    GoodsService goodsService;
 
 
     /**
@@ -79,22 +81,22 @@ public class OrderController {
 
     /**
      * 订单取消
-     * @param userId
+     * @param session 把用户保存到session中
      * @param orderSerial
      * @return
      */
     @RequestMapping(value = "/cancel",method = RequestMethod.GET)
     @ResponseBody
     public Result deleteOrder(HttpServletRequest request, HttpSession session, Model model,
-                              @RequestParam("userId") Long userId,
                               @RequestParam("orderSerial") String orderSerial){
         try {
+            Users user = (Users)session.getAttribute("user");
             model.addAttribute("content","dingdan");
             if(null ==orderSerial || orderSerial.isEmpty()){
                 model.addAttribute("msg", "订单号不能为空");
                 return new Result(false,"订单号不能为空");
             }
-            Order order = orderService.getByUserIdAndOrderSerial(userId, orderSerial);
+            Order order = orderService.getByUserIdAndOrderSerial(user.getUserId(), orderSerial);
             if (null == order) {
                 model.addAttribute("msg", "未找到该订单");
                 return new Result(false,"未找到该订单");
@@ -116,20 +118,21 @@ public class OrderController {
             return new Result(false,null,"取消订单异常");
         }
     }
+
     /**
-     * 订单提交
-     * @param model
+     * 得到订单号
      * @return
      */
-    @RequestMapping(value = "/add",method = RequestMethod.GET)
-    public String addOrder(HttpSession session, Model model){
-        try{
-            return "redirect:/order/confirm";
-        }catch (Exception e){
-            e.printStackTrace();
-            model.addAttribute("msg", e.getMessage());
-            return "500";
+    @RequestMapping(value = "/getOrderSerial",method = RequestMethod.GET)
+    @ResponseBody
+    public Result generateOrderSerial(){
+        // 实时添加订单号
+        String orderSerial = OrderUtil.getOrderId();
+        Order order = orderService.getOrderByOrderSerial(orderSerial);
+        if(null != order){
+            throw new OrderException("已经有这个订单号了");
         }
+        return new Result(true,orderSerial,"订单号生成成功");
     }
 
     /**
@@ -141,20 +144,17 @@ public class OrderController {
     @ResponseBody
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     public Result confirmOrder(@RequestParam("isInvoice") Integer isInvoice,
-                               String orderSerial,
-                               @RequestParam("userId") Long userId) {
+                               @RequestParam("orderSerial") String orderSerial,
+                               HttpSession session) {
         try{
-            Cart cart = shopCartService.getByUserId(userId);
+            Users user = (Users)session.getAttribute("user");
+            Cart cart = shopCartService.getByUserId(user.getUserId());
             if(null==cart){
                 return new Result(false,"购物车为空");
             }
             List<CartItem> cartItemList = cart.getCartItems();
             if (null != cartItemList && !cartItemList.isEmpty()) {
-                // 查询订单是否已经存在,如果订单已存在则返回错误信息
-                if (StringUtils.isEmpty(orderSerial)) {
-                    // 实时添加订单号
-                    orderSerial = OrderUtil.getOrderId();
-                }
+
                 //查询订单是否已经存在，如果订单已存在则返回错误信息
                 if(StringUtils.isEmpty(orderSerial)){
                     Order order = orderService.getOrderByOrderSerial(orderSerial);
@@ -163,12 +163,17 @@ public class OrderController {
                     }
                 }
                 //添加订单
-                Order order = orderService.insert(userId, orderSerial, isInvoice);
+                Order order = orderService.insert(user.getUserId(), orderSerial, isInvoice);
                 //清空购物车
-                cart = shopCartService.getByUserId(userId);
+                cart = shopCartService.getByUserId(user.getUserId());
                 cartItemService.deleteByCartId(cart.getId());
                 cart.setPrice(new BigDecimal(0));
-                shopCartService.update(cart);
+                shopCartService.delete(cart.getId());
+                //减库存
+                for(CartItem cartItem:cartItemList){
+                    goodsService.UpdateCountGoods(cartItem.getGoods().getGoodsId(),cartItem.getItemNum());
+                }
+
                 return new Result(true, orderSerial, "添加成功");
             }else{
                 return new Result(false, "购物车项为空");
@@ -179,62 +184,4 @@ public class OrderController {
         }
         return new Result(false, "订单添加异常");
     }
-
-    /**
-     * 从购物车发送过来的数据，修改购物车表的数据，把勾选的保存到购物车订单表中。
-     * @param userId
-     * @param ids
-     * @param num
-     * @return
-     */
-    @RequestMapping(value = "/uodateOrder/{userId}/{ids}/{num}/{price}",method = RequestMethod.POST)
-    @ResponseBody
-    public Result insertOrder(@PathVariable("userId") Long userId,
-                              @PathVariable("ids") String ids,
-                              @PathVariable("num") String num,
-                              @PathVariable("price") String price){
-        try {
-            if (ids.contains("-")) {
-                List<Long> del_ids = new ArrayList<>();//存放商品id
-                String[] sp_ids = ids.split("-");
-                for (String string : sp_ids) {
-                    del_ids.add(Long.parseLong(string));
-                }
-                List<Integer> item_num = new ArrayList<>();//存放数量
-                String[] sp_num = num.split("-");
-                for (String goods_num : sp_num) {
-                    item_num.add(Integer.parseInt(goods_num));
-                }
-                List<Integer> goods_prices = new ArrayList<>();//存放价格
-                String[] sp_price = price.split("-");
-                Integer price_a = 0;
-                for (String goods_price : sp_price) {
-                    goods_prices.add(Integer.parseInt(goods_price));
-                    price_a = Integer.parseInt(goods_price) + price_a;
-                }
-
-                Cart cart = shopCartService.getByUserId(userId);
-                cart.setPrice(new BigDecimal(price_a));
-                shopCartService.update(cart);
-                List<CartItem> cartItems = cartItemService.getAllByCartId(cart.getId());
-                CartItem[] cartItem = new CartItem[cartItems.size()];
-
-                for (int i = 0; i < goods_prices.size(); i++) {
-                    cartItem[i] = new CartItem();
-
-                    cartItem[i].setId(cartItems.get(i).getId());
-                    cartItem[i].setItemNum(item_num.get(i));
-                    cartItem[i].setPrice(new BigDecimal(goods_prices.get(i)));
-                    cartItemService.update(cartItem[i]);
-
-                }
-            }
-            return new Result(true,"保存成功",null);
-        }catch (Exception e){
-            e.printStackTrace();
-            return new Result(false,"网络错误，请重试",null);
-        }
-    }
-
-
 }

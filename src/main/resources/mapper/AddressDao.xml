@@ -20,7 +20,7 @@
     <sql id="Address_Sql">
         AddressId,UserID,Country,Province,City,County,Site,Consignee,ConsigneeTel
     </sql>
-    <select id="getAddressById" parameterType="java.util.List" resultMap="Address_ResultMap">
+    <!--<select id="getAddressById" parameterType="java.util.List" resultMap="Address_ResultMap">
         select
         <include refid="Address_Sql"/>
         from address address
@@ -31,6 +31,17 @@
     </select>
 
     <select id="getAddressIdByUserId" parameterType="java.lang.Long" resultType="map">
+        select AddressId
+        from address
+        where UserID=#{userId,jdbcType=BIGINT}
+    </select>-->
+<select id="getAddressById" parameterType="long" resultMap="Address_ResultMap">
+    select
+    <include refid="Address_Sql"/>
+    from address address
+    where AddressId=#{addressId}
+</select>
+    <select id="getAddressIdByUserId" parameterType="long" resultType="map">
         select AddressId
         from address
         where UserID=#{userId,jdbcType=BIGINT}

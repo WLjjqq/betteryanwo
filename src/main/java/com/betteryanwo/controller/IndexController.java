@@ -1,7 +1,12 @@
 package com.betteryanwo.controller;
+import com.betteryanwo.entity.Users;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by 辉太狼 on 2018/5/28
@@ -18,8 +23,9 @@ public class IndexController {
 
     @RequestMapping(value = {"", "/cart"})
     public String redictToCart() {
-        return "cart";
+            return "cart";
     }
+
 
     /**
      * 用于跳转到order订单页面
@@ -37,5 +43,14 @@ public class IndexController {
     @RequestMapping(value = "/pay")
     public String replaceToPay() {
         return "pay";
+    }
+
+    /**
+     * 错误的页面的跳转
+     * @return
+     */
+    @RequestMapping(value = "/error")
+    public String return500(){
+        return "500";
     }
 }

@@ -38,9 +38,9 @@ public class CartServcieTest extends BaseTest {
     @Test
     public void test1(){
         CartItem cartItem = new CartItem();
-        cartItem.setCartId(3l);
+        cartItem.setCartId(1l);
         Goods goods = new Goods();
-        goods.setGoodsId(3l);
+        goods.setGoodsId(8l);
         cartItem.setGoods(goods);
         cartItemService.getByCartItem(cartItem);
     }

@@ -30,6 +30,7 @@ public class CartItemTest extends BaseTest{
         CartItem cartInfo1 = cartItemDao.getByCartItem(cartItem);
         System.out.println("abcde:"+cartInfo1);
     }
+
     @Test
     public void test3(){
         cartItemDao.getAllByCartId(1l);

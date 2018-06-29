@@ -1,40 +1,21 @@
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Create by 六
  * Date:18-6-21
  */
 public class Test {
-    private int id;
-    private String name;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Test{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public static void main(String[] args) {
-        Test test = new Test();
-        System.out.println(test);
-
+        List list = new ArrayList();
+        list.add(1);
+        list.add(2);
+        if(  null!=list || list.isEmpty() || list.size()!=0 ){
+            System.out.println("三个条件都是真的。");
+            System.out.println(list.size());
+        }else {
+            System.out.println(list.size());
+        }
     }
 }

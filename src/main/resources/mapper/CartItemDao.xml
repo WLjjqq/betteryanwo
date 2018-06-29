@@ -131,6 +131,7 @@
 			<if test="id != null"> id = #{id} </if>
 			<if test="itemNum != null"> and itemNum = #{itemNum} </if>
 			<if test="cartId != null"> and cartId = #{cartId} </if>
+			<if test="goods.GoodsId !=null">and goods_id=#{goods.GoodsId}</if>
 		</where>
 	</select>
 

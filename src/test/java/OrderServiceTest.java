@@ -15,7 +15,7 @@ public class OrderServiceTest extends BaseTest{
     OrderService orderService;
     @Test
     public void test(){
-        orderService.insert(2l,"664129042",1);
+        orderService.insert(2l,"664129042",0);
     }
     @Test
     public void test1(){
