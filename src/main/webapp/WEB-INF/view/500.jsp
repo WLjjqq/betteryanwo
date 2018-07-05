@@ -98,7 +98,7 @@
 
 		margin: 65px 0 130px;
 
-		background: url("statics/images/cart-empty.png") no-repeat 124px 0;
+		background: url("../../statics/images/cart-empty.png") no-repeat 124px 0;
 
 		color: #b0b0b0;
 

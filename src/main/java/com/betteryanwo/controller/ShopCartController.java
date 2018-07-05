@@ -110,8 +110,9 @@ public class ShopCartController {
         try {
             //查看这个用户有购物车没有
             Cart cart = shopCartService.getByUserId(user.getUserId());
-            if(cart == null) {
-                Cart cart1 = new Cart();
+            if(null == cart) {
+                 cart = new Cart();
+                 cart.setUserId(user.getUserId());
             }
             shopCartService.insert(user.getUserId(),cart,goodsId,number);
             return new Result<>(true, cart, "添加成功");

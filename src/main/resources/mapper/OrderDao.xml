@@ -47,7 +47,7 @@
          from orders where
         order_serial=#{orderSerial}
     </select>
-    <select id="getByUserIdAndOrderId" parameterType="java.lang.Long" resultType="order">
+    <select id="getByUserIdAndOrderSerial" parameterType="order" resultType="order">
         select
         <include refid="Order_Sql"/>
             from orders
@@ -55,4 +55,5 @@
         <if test="userId !=null">and user_id=#{userId}</if>
         <if test="orderSerial !=null">and order_serial=#{orderSerial}</if>
     </select>
+
 </mapper>

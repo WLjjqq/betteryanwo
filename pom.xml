@@ -265,6 +265,13 @@
             <artifactId>pagehelper</artifactId>
             <version>5.0.0</version>
         </dependency>
+        <!--阿里巴巴支付sdk-->
+        <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.1.0</version>
+        </dependency>
         <!--<dependency>
             <groupId>taobao</groupId>
             <artifactId>taobao</artifactId>

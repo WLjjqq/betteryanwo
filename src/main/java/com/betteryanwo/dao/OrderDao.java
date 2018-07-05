@@ -1,6 +1,7 @@
 package com.betteryanwo.dao;
 
 import com.betteryanwo.entity.Order;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,6 +46,7 @@ public interface OrderDao {
      * @param orderSerial
      * @return
      */
-    Order getByUserIdAndOrderSerial(@RequestParam("userId") Long userId,
-                                @RequestParam("orderSerial") String orderSerial);
+    Order getByUserIdAndOrderSerial(@Param("userId") Long userId,
+                                @Param("orderSerial") String orderSerial);
+
 }

@@ -195,7 +195,7 @@
 
         <!--悬浮搜索框-->
 
-        <div class="nav white">
+       ex <div class="nav white">
         <div class="logo"><img src="statics/images/logo.png" /></div>
         <div class="logoBig">
         <li><img src="statics/images/logobig.png" /></li>

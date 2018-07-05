@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -48,11 +47,13 @@ public class UsersController {
      */
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object loginUsers(HttpServletRequest request, Users users, String verifycode, HttpSession session, HttpServletResponse resp) throws ServletException, IOException {
+    public Object loginUsers( Users users, String verifycode, HttpSession session) throws ServletException, IOException {
 
         try {
             String cCode = (String) session.getAttribute("captchaRand");
             Users users1 = usersService.login(users);
+            session.setAttribute("user",users1);
+
             if (verifycode == null) {
                 return new Result(false, "验证码不能为空");
             }
@@ -64,10 +65,8 @@ public class UsersController {
             }
         } catch (LoginException e) {
             e.getMessage();
-            LOGGER.error("UsersController,登录异常|异常产生IP：{}|{}", e.getMessage(), IPUtil.getUserIP(request));
             return new Result(false, e.getMessage());
         } catch (Exception e) {
-            LOGGER.error("UsersController,登录异常|异常产生IP：{}|{}", e.getMessage(), IPUtil.getUserIP(request));
             return new Result(false, "登录失败");
         }
     }
